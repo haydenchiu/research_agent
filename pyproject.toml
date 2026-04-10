@@ -1,0 +1,19 @@
+[project]
+name = "research-agent"
+version = "0.1.0"
+description = "Multi-agent AI research workflow orchestrated by LangGraph"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "langgraph",
+    "langchain-openai",
+    "langchain-anthropic",
+    "langchain-core",
+    "tavily-python",
+    "python-dotenv",
+    "fpdf2",
+    "pandas>=3.0.2",
+    "matplotlib",
+    "seaborn",
+    "numpy",
+]
