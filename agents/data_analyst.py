@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import weave
 from langchain_core.messages import HumanMessage, SystemMessage
 
 from agents.llm_factory import get_llm
@@ -8,6 +9,7 @@ from graph.state import ResearchState
 from tools.python_exec import execute_python
 
 
+@weave.op
 def data_analyst_node(state: ResearchState) -> dict:
     """Generate and execute data analysis code when quantitative work is needed."""
     llm = get_llm("data_analyst")

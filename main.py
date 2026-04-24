@@ -8,6 +8,7 @@ import sys
 import time
 from pathlib import Path
 
+import weave
 from dotenv import load_dotenv
 
 
@@ -21,6 +22,7 @@ def _print_progress(messages: list[dict]) -> None:
     print(f"  [{agent}] {msg}")
 
 
+@weave.op
 def run(query: str, *, max_revisions: int = 3, output_dir: str = "output", verbose: bool = False) -> Path:
     """Execute the full research workflow and return the output path."""
     # Defer heavy imports until after env is loaded
@@ -61,17 +63,17 @@ def run(query: str, *, max_revisions: int = 3, output_dir: str = "output", verbo
     start_time = time.time()
 
     prev_message_count = 0
-    # Stream events for progress reporting
     final_state = None
-    for event in workflow.stream(initial_state, stream_mode="values"):
-        final_state = event
-        messages = event.get("messages", [])
-        new_messages = messages[prev_message_count:]
-        for msg in new_messages:
-            agent = msg.get("agent", "unknown")
-            text = msg.get("message", "")
-            print(f"  [{agent}] {text}")
-        prev_message_count = len(messages)
+    with weave.attributes({"research_query": query, "max_revisions": max_revisions}):
+        for event in workflow.stream(initial_state, stream_mode="values"):
+            final_state = event
+            messages = event.get("messages", [])
+            new_messages = messages[prev_message_count:]
+            for msg in new_messages:
+                agent = msg.get("agent", "unknown")
+                text = msg.get("message", "")
+                print(f"  [{agent}] {text}")
+            prev_message_count = len(messages)
 
     elapsed = time.time() - start_time
     print(f"\nWorkflow completed in {elapsed:.1f}s")
@@ -86,13 +88,11 @@ def run(query: str, *, max_revisions: int = 3, output_dir: str = "output", verbo
         print("Warning: no report was generated.")
         sys.exit(1)
 
-    # Save Markdown
     slug = query[:60].replace(" ", "_").replace("/", "_")
     md_path = out / f"{slug}.md"
     md_path.write_text(final_report)
     print(f"\nMarkdown report saved: {md_path}")
 
-    # Save PDF
     pdf_path = out / f"{slug}.pdf"
     try:
         export_pdf(final_report, pdf_path)
@@ -138,6 +138,7 @@ def main() -> None:
     args = parser.parse_args()
 
     load_dotenv()
+    weave.init("research-agent")
 
     run(args.query, max_revisions=args.max_revisions, output_dir=args.output_dir, verbose=args.verbose)
 

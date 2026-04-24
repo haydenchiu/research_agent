@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import weave
 from langchain_core.messages import HumanMessage, SystemMessage
 
 from agents.llm_factory import get_llm
@@ -7,6 +8,7 @@ from agents.utils import load_prompt, log_agent
 from graph.state import ResearchState
 
 
+@weave.op
 def analyst_node(state: ResearchState) -> dict:
     """Synthesize search results into a coherent analysis."""
     llm = get_llm("analyst")

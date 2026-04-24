@@ -21,6 +21,33 @@ class ResearchPDF(FPDF):
         self.cell(0, 10, f"Page {self.page_no()}/{{nb}}", align="C")
 
 
+_UNICODE_REPLACEMENTS = {
+    "\u2014": "--",   # em dash
+    "\u2013": "-",    # en dash
+    "\u2192": "->",   # right arrow
+    "\u2190": "<-",   # left arrow
+    "\u2194": "<->",  # left-right arrow
+    "\u2018": "'",    # left single quote
+    "\u2019": "'",    # right single quote
+    "\u201C": '"',    # left double quote
+    "\u201D": '"',    # right double quote
+    "\u2026": "...",  # ellipsis
+    "\u2022": "*",    # bullet
+    "\u2023": ">",    # triangular bullet
+    "\u2212": "-",    # minus sign
+    "\u00A0": " ",    # non-breaking space
+    "\u2003": " ",    # em space
+    "\u2002": " ",    # en space
+}
+
+
+def _sanitize_for_latin1(text: str) -> str:
+    """Replace common Unicode characters with ASCII equivalents for Helvetica."""
+    for unicode_char, replacement in _UNICODE_REPLACEMENTS.items():
+        text = text.replace(unicode_char, replacement)
+    return text.encode("latin-1", errors="replace").decode("latin-1")
+
+
 def _strip_markdown(text: str) -> str:
     """Light Markdown stripping for plain-text PDF rendering."""
     text = re.sub(r"^#{1,6}\s+", "", text, flags=re.MULTILINE)
@@ -48,19 +75,19 @@ def export_pdf(markdown_text: str, output_path: str | Path) -> Path:
             pdf.set_font("Helvetica", "B", 18)
             pdf.set_text_color(0, 0, 0)
             pdf.ln(4)
-            pdf.cell(0, 10, stripped[2:], new_x="LMARGIN", new_y="NEXT")
+            pdf.cell(0, 10, _sanitize_for_latin1(stripped[2:]), new_x="LMARGIN", new_y="NEXT")
             pdf.ln(2)
         elif stripped.startswith("## "):
             pdf.set_font("Helvetica", "B", 14)
             pdf.set_text_color(40, 40, 40)
             pdf.ln(3)
-            pdf.cell(0, 8, stripped[3:], new_x="LMARGIN", new_y="NEXT")
+            pdf.cell(0, 8, _sanitize_for_latin1(stripped[3:]), new_x="LMARGIN", new_y="NEXT")
             pdf.ln(2)
         elif stripped.startswith("### "):
             pdf.set_font("Helvetica", "B", 12)
             pdf.set_text_color(60, 60, 60)
             pdf.ln(2)
-            pdf.cell(0, 7, stripped[4:], new_x="LMARGIN", new_y="NEXT")
+            pdf.cell(0, 7, _sanitize_for_latin1(stripped[4:]), new_x="LMARGIN", new_y="NEXT")
             pdf.ln(1)
         elif stripped.startswith("---"):
             pdf.line(10, pdf.get_y(), 200, pdf.get_y())
@@ -71,7 +98,7 @@ def export_pdf(markdown_text: str, output_path: str | Path) -> Path:
             pdf.set_font("Helvetica", "", 10)
             pdf.set_text_color(30, 30, 30)
             clean = _strip_markdown(stripped)
-            pdf.multi_cell(0, 5, clean)
+            pdf.multi_cell(0, 5, _sanitize_for_latin1(clean))
             pdf.ln(1)
 
     # Embed chart images if referenced

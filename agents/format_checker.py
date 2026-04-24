@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import weave
 from langchain_core.messages import HumanMessage, SystemMessage
 
 from agents.llm_factory import get_llm
@@ -7,6 +8,7 @@ from agents.utils import load_prompt, log_agent, parse_json_response
 from graph.state import ResearchState
 
 
+@weave.op
 def format_checker_node(state: ResearchState) -> dict:
     """Validate the Markdown structure and formatting of the report."""
     llm = get_llm("format_checker")

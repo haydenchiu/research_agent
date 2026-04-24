@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import weave
 from langchain_core.messages import HumanMessage, SystemMessage
 
 from agents.llm_factory import get_llm
@@ -8,6 +9,7 @@ from graph.state import ResearchState
 from tools.chart_loader import build_image_message_content
 
 
+@weave.op
 def chart_reviewer_node(state: ResearchState) -> dict:
     """Visually inspect generated charts using a vision model."""
     llm = get_llm("chart_reviewer")

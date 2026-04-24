@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import weave
 from langchain_core.messages import HumanMessage, SystemMessage
 
 from agents.llm_factory import get_llm
@@ -8,6 +9,7 @@ from graph.state import ResearchState
 from tools.search import tavily_search
 
 
+@weave.op
 def searcher_node(state: ResearchState) -> dict:
     """Search the web for each sub-question and collect findings."""
     llm = get_llm("searcher")

@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import weave
 from tavily import TavilyClient
 
 from config.settings import get_tavily_api_key
 
 
+@weave.op
 def tavily_search(
     query: str,
     *,

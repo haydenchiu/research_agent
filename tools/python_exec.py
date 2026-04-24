@@ -6,9 +6,12 @@ import traceback
 import uuid
 from pathlib import Path
 
+import weave
+
 from config.settings import CHARTS_DIR
 
 
+@weave.op
 def execute_python(code: str) -> dict:
     """Execute Python code in a sandboxed environment with data-analysis libraries.
 

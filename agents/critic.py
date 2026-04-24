@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import weave
 from langchain_core.messages import HumanMessage, SystemMessage
 
 from agents.llm_factory import get_llm
@@ -7,6 +8,7 @@ from agents.utils import load_prompt, log_agent, parse_json_response
 from graph.state import ResearchState
 
 
+@weave.op
 def critic_node(state: ResearchState) -> dict:
     """Review the analysis for quality, completeness, and accuracy."""
     llm = get_llm("critic")
