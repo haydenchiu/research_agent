@@ -1,0 +1,22 @@
+[
+  {
+    "id": "critic_good_analysis",
+    "research_query": "What are the economic impacts of AI on the labor market?",
+    "analysis": "## Analysis: Economic Impacts of AI on the Labor Market\n\nAI adoption has accelerated significantly since 2020, with roughly 50% growth in enterprise deployments.\n\n### Key Themes\n- Automation is concentrated in routine cognitive tasks like data entry and basic accounting.\n- Administrative and clerical roles face the highest displacement risk.\n- New job categories are emerging: AI trainers, prompt engineers, and ethics specialists.\n- For every job displaced, approximately 1.3 new positions are created.\n- Policy responses vary globally, with some nations investing in retraining programs.\n\n### Sources\n- [AI Report 2025](https://example.com/ai-report)\n- [Jobs and AI Study](https://example.com/jobs-ai)",
+    "revision_count": 0,
+    "max_revisions": 3,
+    "target": {
+      "expected_approved": true
+    }
+  },
+  {
+    "id": "critic_weak_analysis",
+    "research_query": "What are the economic impacts of AI on the labor market?",
+    "analysis": "AI is changing jobs. Some people lose jobs and some get new ones. It is a big topic.",
+    "revision_count": 0,
+    "max_revisions": 3,
+    "target": {
+      "expected_approved": false
+    }
+  }
+]

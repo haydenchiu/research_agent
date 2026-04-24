@@ -3,59 +3,76 @@ from __future__ import annotations
 import weave
 from langchain_core.messages import HumanMessage, SystemMessage
 
-from agents.llm_factory import get_llm
+from agents.llm_factory import build_llm
 from agents.utils import load_prompt, log_agent, parse_json_response
 from graph.state import ResearchState
 
 
-@weave.op
-def critic_node(state: ResearchState) -> dict:
-    """Review the analysis for quality, completeness, and accuracy."""
-    llm = get_llm("critic")
-    system_prompt = load_prompt("critic")
+class CriticAgent(weave.Model):
+    model_name: str = "gpt-4o"
+    provider: str = "openai"
+    temperature: float = 0.4
+    max_tokens: int = 4096
 
-    query = state["research_query"]
-    analysis = state.get("analysis", "")
-    revision_count = state.get("revision_count", 0)
-    max_revisions = state.get("max_revisions", 3)
+    @weave.op()
+    def predict(
+        self,
+        research_query: str,
+        analysis: str,
+        revision_count: int = 0,
+        max_revisions: int = 3,
+    ) -> dict:
+        llm = build_llm(self.provider, self.model_name, self.temperature, self.max_tokens)
+        system_prompt = load_prompt("critic")
 
-    response = llm.invoke(
-        [
-            SystemMessage(content=system_prompt),
-            HumanMessage(
-                content=(
-                    f"Original research question: {query}\n\n"
-                    f"Analysis to review (revision {revision_count}/{max_revisions}):\n\n"
-                    f"{analysis}"
-                )
-            ),
-        ]
-    )
+        response = llm.invoke(
+            [
+                SystemMessage(content=system_prompt),
+                HumanMessage(
+                    content=(
+                        f"Original research question: {research_query}\n\n"
+                        f"Analysis to review (revision {revision_count}/{max_revisions}):\n\n"
+                        f"{analysis}"
+                    )
+                ),
+            ]
+        )
 
-    parsed = parse_json_response(response.content)
+        parsed = parse_json_response(response.content)
 
-    critique = {
-        "approved": parsed.get("approved", False),
-        "gaps": parsed.get("gaps", []),
-        "needs_data_analysis": parsed.get("needs_data_analysis", False),
-        "feedback": parsed.get("feedback", ""),
-        "additional_search_queries": parsed.get("additional_search_queries", []),
-    }
+        critique = {
+            "approved": parsed.get("approved", False),
+            "gaps": parsed.get("gaps", []),
+            "needs_data_analysis": parsed.get("needs_data_analysis", False),
+            "feedback": parsed.get("feedback", ""),
+            "additional_search_queries": parsed.get("additional_search_queries", []),
+        }
+        return {"critique": critique}
 
-    # If not approved and we still have revisions, add the new queries as sub-questions
-    new_sub_questions = state.get("sub_questions", [])
-    if not critique["approved"] and revision_count < max_revisions:
-        extra_queries = critique.get("additional_search_queries", [])
-        if extra_queries:
-            new_sub_questions = extra_queries
+    def node(self, state: ResearchState) -> dict:
+        revision_count = state.get("revision_count", 0)
+        max_revisions = state.get("max_revisions", 3)
 
-    status = "approved" if critique["approved"] else "revision requested"
-    data_flag = " (data analysis needed)" if critique["needs_data_analysis"] else ""
+        result = self.predict(
+            research_query=state["research_query"],
+            analysis=state.get("analysis", ""),
+            revision_count=revision_count,
+            max_revisions=max_revisions,
+        )
 
-    return {
-        "critique": critique,
-        "data_analysis_needed": critique["needs_data_analysis"],
-        "sub_questions": new_sub_questions,
-        "revision_count": revision_count + 1,
-        "messages": [log_agent("critic", f"Review: {status}{data_flag}")],
-    }
+        critique = result["critique"]
+
+        new_sub_questions = state.get("sub_questions", [])
+        if not critique["approved"] and revision_count < max_revisions:
+            extra_queries = critique.get("additional_search_queries", [])
+            if extra_queries:
+                new_sub_questions = extra_queries
+
+        status = "approved" if critique["approved"] else "revision requested"
+        data_flag = " (data analysis needed)" if critique["needs_data_analysis"] else ""
+
+        result["data_analysis_needed"] = critique["needs_data_analysis"]
+        result["sub_questions"] = new_sub_questions
+        result["revision_count"] = revision_count + 1
+        result["messages"] = [log_agent("critic", f"Review: {status}{data_flag}")]
+        return result

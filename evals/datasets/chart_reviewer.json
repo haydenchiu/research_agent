@@ -1,0 +1,12 @@
+[
+  {
+    "id": "chart_reviewer_no_charts",
+    "chart_paths": [],
+    "data_analysis_result": "No data analysis was performed."
+  },
+  {
+    "id": "chart_reviewer_with_context",
+    "chart_paths": [],
+    "data_analysis_result": "**Analysis Summary**: Job displacement by sector shows manufacturing at 35%, services at 28%, and administrative at 22%.\n\n**Output**:\n```\nSector      | Displacement Rate\nManufacturing | 35%\nServices      | 28%\nAdministrative| 22%\n```"
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "planner_ai_labor",
+    "research_query": "What are the economic impacts of AI on the labor market?",
+    "target": {
+      "min_questions": 3,
+      "expected_themes": ["adoption", "job displacement", "new job creation", "policy"]
+    }
+  },
+  {
+    "id": "planner_climate",
+    "research_query": "How effective are current carbon capture technologies in mitigating climate change?",
+    "target": {
+      "min_questions": 3,
+      "expected_themes": ["carbon capture methods", "cost effectiveness", "scalability", "environmental impact"]
+    }
+  },
+  {
+    "id": "planner_remote_work",
+    "research_query": "What are the long-term effects of remote work on productivity and employee wellbeing?",
+    "target": {
+      "min_questions": 3,
+      "expected_themes": ["productivity", "mental health", "work-life balance", "collaboration"]
+    }
+  }
+]

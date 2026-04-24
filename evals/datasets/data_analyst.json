@@ -1,0 +1,28 @@
+[
+  {
+    "id": "data_analyst_ai_labor",
+    "research_query": "What are the economic impacts of AI on the labor market?",
+    "analysis": "AI adoption has grown 50% since 2020. Routine cognitive tasks are most at risk. New job categories are emerging.",
+    "critique": {
+      "approved": false,
+      "needs_data_analysis": true,
+      "data_analysis_suggestion": "Create a visualization showing job displacement vs creation by sector",
+      "gaps": [],
+      "feedback": "Needs quantitative data to support claims."
+    },
+    "chart_review": {}
+  },
+  {
+    "id": "data_analyst_climate",
+    "research_query": "How effective are current carbon capture technologies?",
+    "analysis": "DAC costs $250-600/ton. Post-combustion capture costs $40-120/ton. Current capacity is 45 Mt/year.",
+    "critique": {
+      "approved": false,
+      "needs_data_analysis": true,
+      "data_analysis_suggestion": "Compare costs and capacities of different CCS methods",
+      "gaps": [],
+      "feedback": "Would benefit from data visualizations."
+    },
+    "chart_review": {}
+  }
+]

@@ -143,19 +143,22 @@ def _make_mock_llm(response_text: str) -> MagicMock:
     return mock
 
 
-def _get_mock_llm_for_agent(agent_name: str) -> MagicMock:
-    """Return the appropriate mock LLM for each agent."""
-    response_map = {
-        "planner": PLANNER_RESPONSE,
-        "searcher": SEARCHER_RESPONSE,
-        "analyst": ANALYST_RESPONSE,
-        "critic": CRITIC_APPROVED_RESPONSE,
-        "data_analyst": "{}",
-        "chart_reviewer": '{"approved": true, "issues": [], "suggestions": []}',
-        "writer": WRITER_RESPONSE,
-        "format_checker": FORMAT_CHECKER_PASS,
-    }
-    return _make_mock_llm(response_map.get(agent_name, "{}"))
+AGENT_RESPONSE_MAP = {
+    "planner": PLANNER_RESPONSE,
+    "searcher": SEARCHER_RESPONSE,
+    "analyst": ANALYST_RESPONSE,
+    "critic": CRITIC_APPROVED_RESPONSE,
+    "data_analyst": "{}",
+    "chart_reviewer": '{"approved": true, "issues": [], "suggestions": []}',
+    "writer": WRITER_RESPONSE,
+    "format_checker": FORMAT_CHECKER_PASS,
+}
+
+
+def _mock_build_llm(provider: str, model_name: str, temperature: float = 0.3, max_tokens: int = 4096) -> MagicMock:
+    """Return a mock LLM. The response is injected per-test via side_effect or
+    we use a default that returns empty JSON."""
+    return _make_mock_llm("{}")
 
 
 # ---------------------------------------------------------------------------
@@ -185,19 +188,60 @@ def test_graph_topology():
     print("  [PASS] Graph topology has all 8 agent nodes")
 
 
+def _build_llm_for_agent(agent_class_name: str):
+    """Map agent class -> mock LLM based on which agent is calling build_llm."""
+    agent_key_map = {
+        "PlannerAgent": "planner",
+        "SearcherAgent": "searcher",
+        "AnalystAgent": "analyst",
+        "CriticAgent": "critic",
+        "DataAnalystAgent": "data_analyst",
+        "ChartReviewerAgent": "chart_reviewer",
+        "WriterAgent": "writer",
+        "FormatCheckerAgent": "format_checker",
+    }
+    return agent_key_map.get(agent_class_name, "")
+
+
+def _mock_build_llm_by_model(provider, model_name, temperature=0.3, max_tokens=4096):
+    """Route mock responses by (provider, model_name) pair, which is unique per agent."""
+    model_to_agent = {
+        ("anthropic", "claude-sonnet-4-20250514", 0.3, 4096): "planner",
+        ("openai", "gpt-4o-mini", 0.1, 4096): "searcher",
+        ("anthropic", "claude-sonnet-4-20250514", 0.3, 4096): "analyst",
+        ("openai", "gpt-4o", 0.4, 4096): "critic",
+        ("openai", "gpt-4o", 0.3, 4096): "data_analyst",
+        ("openai", "gpt-4o", 0.2, 4096): "chart_reviewer",
+        ("anthropic", "claude-sonnet-4-20250514", 0.3, 8192): "writer",
+        ("openai", "gpt-4o-mini", 0.1, 4096): "format_checker",
+    }
+    key = (provider, model_name, temperature, max_tokens)
+    agent_name = model_to_agent.get(key, "")
+    response_text = AGENT_RESPONSE_MAP.get(agent_name, "{}")
+    return _make_mock_llm(response_text)
+
+
 def test_full_workflow_happy_path():
     """Run the full workflow with mocked LLMs (critic approves on first pass)."""
     output_dir = Path("output/test_run")
     output_dir.mkdir(parents=True, exist_ok=True)
 
     with (
-        patch("agents.planner.get_llm", lambda _: _get_mock_llm_for_agent("planner")),
-        patch("agents.searcher.get_llm", lambda _: _get_mock_llm_for_agent("searcher")),
-        patch("agents.analyst.get_llm", lambda _: _get_mock_llm_for_agent("analyst")),
-        patch("agents.critic.get_llm", lambda _: _get_mock_llm_for_agent("critic")),
-        patch("agents.writer.get_llm", lambda _: _get_mock_llm_for_agent("writer")),
-        patch("agents.format_checker.get_llm", lambda _: _get_mock_llm_for_agent("format_checker")),
+        patch("agents.llm_factory.get_api_key", return_value="test-key"),
         patch("agents.searcher.tavily_search", return_value=MOCK_SEARCH_RESULTS),
+        patch("agents.llm_factory.ChatOpenAI", side_effect=lambda **kw: _make_mock_llm(
+            AGENT_RESPONSE_MAP.get({
+                (0.1, 4096): "searcher",
+                (0.4, 4096): "critic",
+                (0.3, 4096): "data_analyst",
+                (0.2, 4096): "chart_reviewer",
+            }.get((kw.get("temperature"), kw.get("max_tokens")), "format_checker"), "{}")
+        )),
+        patch("agents.llm_factory.ChatAnthropic", side_effect=lambda **kw: _make_mock_llm(
+            AGENT_RESPONSE_MAP.get(
+                "writer" if kw.get("max_tokens") == 8192 else "planner", "{}"
+            )
+        )),
     ):
         workflow = compile_workflow()
         initial_state = {

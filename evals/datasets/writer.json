@@ -1,0 +1,36 @@
+[
+  {
+    "id": "writer_ai_labor",
+    "research_query": "What are the economic impacts of AI on the labor market?",
+    "analysis": "## Analysis: Economic Impacts of AI\n\nAI adoption has grown 50% since 2020. Routine cognitive tasks face displacement. New jobs are emerging in AI-adjacent fields. Policy responses include retraining programs.\n\n### Sources\n- [AI Report 2025](https://example.com/ai-report)\n- [Jobs and AI Study](https://example.com/jobs-ai)",
+    "data_analysis_result": "",
+    "chart_paths": [],
+    "format_issues": [],
+    "target": {
+      "key_terms": ["AI", "labor market", "displacement", "automation", "new jobs"],
+      "talking_points": [
+        "AI adoption rate and growth trends",
+        "Which job categories face highest displacement risk",
+        "New job creation in AI-adjacent fields",
+        "Policy recommendations for workforce transition"
+      ]
+    }
+  },
+  {
+    "id": "writer_climate",
+    "research_query": "How effective are current carbon capture technologies?",
+    "analysis": "## Analysis: Carbon Capture Technologies\n\nDAC costs $250-600/ton. Post-combustion capture costs $40-120/ton. Current capacity is 45 Mt/year, far below gigatons needed.",
+    "data_analysis_result": "",
+    "chart_paths": [],
+    "format_issues": [],
+    "target": {
+      "key_terms": ["carbon capture", "direct air capture", "cost", "scalability"],
+      "talking_points": [
+        "Overview of carbon capture methods",
+        "Cost comparison between methods",
+        "Current vs required capacity gap",
+        "Future outlook and scaling challenges"
+      ]
+    }
+  }
+]

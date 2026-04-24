@@ -16,5 +16,5 @@ dependencies = [
     "matplotlib",
     "seaborn",
     "numpy",
-    "weave",
+    "weave[scorers]",
 ]

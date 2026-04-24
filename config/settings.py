@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass, field
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -12,26 +11,6 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 PROMPTS_DIR = PROJECT_ROOT / "prompts"
 OUTPUT_DIR = PROJECT_ROOT / "output"
 CHARTS_DIR = OUTPUT_DIR / "charts"
-
-
-@dataclass(frozen=True)
-class ModelSpec:
-    provider: str  # "openai" or "anthropic"
-    model_name: str
-    temperature: float = 0.3
-    max_tokens: int = 4096
-
-
-AGENT_MODELS: dict[str, ModelSpec] = {
-    "planner": ModelSpec(provider="anthropic", model_name="claude-sonnet-4-20250514"),
-    "searcher": ModelSpec(provider="openai", model_name="gpt-4o-mini", temperature=0.1),
-    "analyst": ModelSpec(provider="anthropic", model_name="claude-sonnet-4-20250514"),
-    "critic": ModelSpec(provider="openai", model_name="gpt-4o", temperature=0.4),
-    "data_analyst": ModelSpec(provider="openai", model_name="gpt-4o"),
-    "chart_reviewer": ModelSpec(provider="openai", model_name="gpt-4o", temperature=0.2),
-    "writer": ModelSpec(provider="anthropic", model_name="claude-sonnet-4-20250514", max_tokens=8192),
-    "format_checker": ModelSpec(provider="openai", model_name="gpt-4o-mini", temperature=0.1),
-}
 
 DEFAULT_MAX_REVISIONS = 3
 DEFAULT_MAX_CHART_REVISIONS = 2

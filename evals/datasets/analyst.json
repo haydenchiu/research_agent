@@ -1,0 +1,59 @@
+[
+  {
+    "id": "analyst_ai_labor",
+    "research_query": "What are the economic impacts of AI on the labor market?",
+    "search_results": [
+      {
+        "query": "AI adoption in workplaces",
+        "url": "https://example.com/ai-report",
+        "title": "AI Report 2025",
+        "content": "AI adoption has grown 50% since 2020 across enterprises. Key areas include customer service automation, document processing, and predictive analytics."
+      },
+      {
+        "query": "Jobs affected by AI automation",
+        "url": "https://example.com/jobs-ai",
+        "title": "Jobs and AI Study",
+        "content": "Routine cognitive tasks are most at risk. Administrative assistants, data entry clerks, and basic accounting roles face the highest displacement risk."
+      },
+      {
+        "query": "Counterarguments AI job displacement",
+        "url": "https://example.com/ai-jobs-counter",
+        "title": "AI Creates Jobs Too",
+        "content": "For every job displaced by AI, 1.3 new jobs are created in AI development, maintenance, and adjacent fields. The net effect may be positive."
+      }
+    ],
+    "target": {
+      "expected_terms": ["adoption", "automation", "displacement", "new jobs"],
+      "key_findings": [
+        "AI adoption has accelerated significantly",
+        "Routine cognitive tasks are most affected",
+        "New job categories are emerging"
+      ]
+    }
+  },
+  {
+    "id": "analyst_climate",
+    "research_query": "How effective are current carbon capture technologies?",
+    "search_results": [
+      {
+        "query": "carbon capture technologies",
+        "url": "https://example.com/ccs-overview",
+        "title": "CCS Technology Overview",
+        "content": "Direct air capture (DAC) can remove CO2 at $250-600 per ton. Post-combustion capture from power plants operates at $40-120 per ton."
+      },
+      {
+        "query": "carbon capture scalability",
+        "url": "https://example.com/ccs-scale",
+        "title": "Scaling Carbon Capture",
+        "content": "Current global CCS capacity is approximately 45 million tons per year, far below the gigatons needed to meet climate goals."
+      }
+    ],
+    "target": {
+      "expected_terms": ["direct air capture", "cost", "scalability"],
+      "key_findings": [
+        "Multiple carbon capture methods exist with varying costs",
+        "Current capacity is far below what is needed"
+      ]
+    }
+  }
+]

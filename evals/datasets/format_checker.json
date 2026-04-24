@@ -1,0 +1,16 @@
+[
+  {
+    "id": "format_checker_good_report",
+    "draft_report": "# Economic Impacts of AI on the Labor Market\n\n## Executive Summary\n\nThis report examines the economic impacts of artificial intelligence on employment.\n\n## Introduction\n\nArtificial intelligence is transforming the global economy.\n\n## Methodology\n\nInformation was gathered through systematic web search and synthesis.\n\n## Findings\n\nAI adoption has grown 50% since 2020, primarily in routine cognitive tasks.\n\n## Discussion\n\nThe evidence suggests a mixed picture with both displacement and creation effects.\n\n## Conclusion\n\nAI's impact on labor markets is significant but nuanced.\n\n## References\n\n1. [AI Report 2025](https://example.com/ai-report)",
+    "target": {
+      "expected_passed": true
+    }
+  },
+  {
+    "id": "format_checker_bad_report",
+    "draft_report": "AI is changing jobs.\n\nSome people lose jobs. Others get new ones.\n\nThe end.",
+    "target": {
+      "expected_passed": false
+    }
+  }
+]

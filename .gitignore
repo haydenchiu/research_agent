@@ -17,3 +17,4 @@ output/*.md
 output/*.pdf
 output/charts/
 output/test_run/
+output/traces/

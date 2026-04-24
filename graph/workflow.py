@@ -4,14 +4,14 @@ from typing import Literal
 
 from langgraph.graph import END, START, StateGraph
 
-from agents.analyst import analyst_node
-from agents.chart_reviewer import chart_reviewer_node
-from agents.critic import critic_node
-from agents.data_analyst import data_analyst_node
-from agents.format_checker import format_checker_node
-from agents.planner import planner_node
-from agents.searcher import searcher_node
-from agents.writer import writer_node
+from agents.analyst import AnalystAgent
+from agents.chart_reviewer import ChartReviewerAgent
+from agents.critic import CriticAgent
+from agents.data_analyst import DataAnalystAgent
+from agents.format_checker import FormatCheckerAgent
+from agents.planner import PlannerAgent
+from agents.searcher import SearcherAgent
+from agents.writer import WriterAgent
 from config.settings import DEFAULT_MAX_CHART_REVISIONS, DEFAULT_MAX_REVISIONS
 from graph.state import ResearchState
 
@@ -61,16 +61,25 @@ def _route_after_format_checker(
 
 def build_workflow() -> StateGraph:
     """Construct the multi-agent research workflow graph."""
+    planner = PlannerAgent()
+    searcher = SearcherAgent()
+    analyst = AnalystAgent()
+    critic = CriticAgent()
+    data_analyst = DataAnalystAgent()
+    chart_reviewer = ChartReviewerAgent()
+    writer = WriterAgent()
+    format_checker = FormatCheckerAgent()
+
     builder = StateGraph(ResearchState)
 
-    builder.add_node("planner", planner_node)
-    builder.add_node("searcher", searcher_node)
-    builder.add_node("analyst", analyst_node)
-    builder.add_node("critic", critic_node)
-    builder.add_node("data_analyst", data_analyst_node)
-    builder.add_node("chart_reviewer", chart_reviewer_node)
-    builder.add_node("writer", writer_node)
-    builder.add_node("format_checker", format_checker_node)
+    builder.add_node("planner", planner.node)
+    builder.add_node("searcher", searcher.node)
+    builder.add_node("analyst", analyst.node)
+    builder.add_node("critic", critic.node)
+    builder.add_node("data_analyst", data_analyst.node)
+    builder.add_node("chart_reviewer", chart_reviewer.node)
+    builder.add_node("writer", writer.node)
+    builder.add_node("format_checker", format_checker.node)
 
     # Linear edges
     builder.add_edge(START, "planner")

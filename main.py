@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 import time
 from pathlib import Path
@@ -22,10 +23,47 @@ def _print_progress(messages: list[dict]) -> None:
     print(f"  [{agent}] {msg}")
 
 
+TRACE_FIELDS_PER_AGENT = {
+    "planner": ["research_query", "sub_questions"],
+    "searcher": ["sub_questions", "search_results"],
+    "analyst": ["research_query", "search_results", "analysis"],
+    "critic": ["research_query", "analysis", "revision_count", "max_revisions", "critique"],
+    "data_analyst": ["research_query", "analysis", "critique", "chart_review", "data_analysis_result", "chart_paths"],
+    "chart_reviewer": ["chart_paths", "data_analysis_result", "chart_review"],
+    "writer": ["research_query", "analysis", "data_analysis_result", "chart_paths", "format_issues", "draft_report"],
+    "format_checker": ["draft_report", "final_report", "format_issues"],
+}
+
+
+def _save_trace(state: dict, trace_dir: Path) -> None:
+    """Save per-agent state snapshots for building eval datasets."""
+    trace_dir.mkdir(parents=True, exist_ok=True)
+    traces = {}
+    for agent_name, fields in TRACE_FIELDS_PER_AGENT.items():
+        snapshot = {}
+        for field in fields:
+            value = state.get(field)
+            if value is not None:
+                snapshot[field] = value
+        traces[agent_name] = snapshot
+
+    slug = state.get("research_query", "unknown")[:60].replace(" ", "_").replace("/", "_")
+    trace_path = trace_dir / f"{slug}_trace.json"
+    with open(trace_path, "w") as f:
+        json.dump(traces, f, indent=2, default=str)
+    print(f"\nTrace saved: {trace_path}")
+
+
 @weave.op
-def run(query: str, *, max_revisions: int = 3, output_dir: str = "output", verbose: bool = False) -> Path:
+def run(
+    query: str,
+    *,
+    max_revisions: int = 3,
+    output_dir: str = "output",
+    verbose: bool = False,
+    save_trace: bool = False,
+) -> Path:
     """Execute the full research workflow and return the output path."""
-    # Defer heavy imports until after env is loaded
     from config.settings import OUTPUT_DIR
     from graph.workflow import compile_workflow
     from tools.pdf_export import export_pdf
@@ -82,6 +120,9 @@ def run(query: str, *, max_revisions: int = 3, output_dir: str = "output", verbo
         print("Error: workflow produced no output.")
         sys.exit(1)
 
+    if save_trace:
+        _save_trace(final_state, out / "traces")
+
     final_report = final_state.get("final_report", "") or final_state.get("draft_report", "")
 
     if not final_report:
@@ -116,6 +157,7 @@ def main() -> None:
             "Examples:\n"
             '  python main.py "What are the economic impacts of AI on the labor market?"\n'
             '  python main.py "..." --max-revisions 5 --output-dir ./reports --verbose\n'
+            '  python main.py "..." --save-trace   # dump per-agent state for eval datasets\n'
         ),
     )
     parser.add_argument("query", help="The research question to investigate")
@@ -135,12 +177,23 @@ def main() -> None:
         action="store_true",
         help="Print the full audit trail after completion",
     )
+    parser.add_argument(
+        "--save-trace",
+        action="store_true",
+        help="Save per-agent state snapshots to output/traces/ for building eval datasets",
+    )
     args = parser.parse_args()
 
     load_dotenv()
     weave.init("research-agent")
 
-    run(args.query, max_revisions=args.max_revisions, output_dir=args.output_dir, verbose=args.verbose)
+    run(
+        args.query,
+        max_revisions=args.max_revisions,
+        output_dir=args.output_dir,
+        verbose=args.verbose,
+        save_trace=args.save_trace,
+    )
 
 
 if __name__ == "__main__":

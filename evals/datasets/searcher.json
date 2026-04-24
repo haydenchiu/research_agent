@@ -1,0 +1,24 @@
+[
+  {
+    "id": "searcher_ai_labor",
+    "sub_questions": [
+      "What is the current state of AI adoption in workplaces?",
+      "What jobs are most affected by AI automation?",
+      "What are the counterarguments to AI job displacement?"
+    ],
+    "target": {
+      "expected_urls": []
+    }
+  },
+  {
+    "id": "searcher_climate",
+    "sub_questions": [
+      "What are the main carbon capture technologies currently in use?",
+      "How cost-effective is direct air capture compared to other methods?",
+      "What is the current global capacity for carbon capture and storage?"
+    ],
+    "target": {
+      "expected_urls": []
+    }
+  }
+]
