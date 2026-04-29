@@ -55,7 +55,7 @@ def analyst_term_overlap(output: dict, target: dict) -> dict:
 
 
 class AnalystQualityScorer(Scorer):
-    """LLM judge: coherence, depth, and balance of the analysis."""
+    """LLM judge: coherence, depth, and balance of the analysis (binary per criterion)."""
 
     model_id: str = "gpt-4o-mini"
 
@@ -71,11 +71,13 @@ class AnalystQualityScorer(Scorer):
                 {
                     "role": "system",
                     "content": (
-                        "Evaluate a research analysis on these criteria (1-5 each):\n"
-                        "- coherence: logical flow and structure\n"
-                        "- depth: thoroughness of coverage\n"
-                        "- balance: fair representation of different perspectives\n"
-                        "Return JSON: {\"coherence\": int, \"depth\": int, \"balance\": int, \"explanation\": str}"
+                        "Evaluate a research analysis. For each criterion, "
+                        "return 1 if satisfied or 0 if not.\n"
+                        "- coherence: the analysis has logical flow and clear structure\n"
+                        "- depth: the topic is covered thoroughly, not superficially\n"
+                        "- balance: different perspectives are fairly represented\n"
+                        "Return JSON: {\"coherence\": int, \"depth\": int, "
+                        "\"balance\": int, \"explanation\": str}"
                     ),
                 },
                 {
@@ -85,10 +87,14 @@ class AnalystQualityScorer(Scorer):
             ],
         )
         parsed = parse_json_response(response.choices[0].message.content)
+        coherence = int(bool(parsed.get("coherence", 0)))
+        depth = int(bool(parsed.get("depth", 0)))
+        balance = int(bool(parsed.get("balance", 0)))
         return {
-            "coherence": parsed.get("coherence", 3) / 5.0,
-            "depth": parsed.get("depth", 3) / 5.0,
-            "balance": parsed.get("balance", 3) / 5.0,
+            "coherence": coherence,
+            "depth": depth,
+            "balance": balance,
+            "score": coherence + depth + balance,
             "explanation": parsed.get("explanation", ""),
         }
 
@@ -99,7 +105,7 @@ class AnalystQualityScorer(Scorer):
 
 
 class AnalystFindingsCoverageScorer(Scorer):
-    """LLM judge: does the analysis cover the gold-standard key findings?"""
+    """LLM judge: does the analysis cover the gold-standard key findings? (per-item hit count)"""
 
     model_id: str = "gpt-4o-mini"
 
@@ -107,7 +113,10 @@ class AnalystFindingsCoverageScorer(Scorer):
     def score(self, output: dict, target: dict, research_query: str) -> dict:
         analysis = output.get("analysis", "")
         key_findings = target.get("key_findings", [])
-        findings_text = "\n".join(f"- {f}" for f in key_findings)
+        if not key_findings:
+            return {"finding_hits": 0, "finding_total": 0, "findings_coverage": 1.0, "missing_findings": []}
+
+        findings_list = "\n".join(f"{i+1}. {f}" for i, f in enumerate(key_findings))
 
         client = OpenAI()
         response = client.chat.completions.create(
@@ -117,8 +126,10 @@ class AnalystFindingsCoverageScorer(Scorer):
                 {
                     "role": "system",
                     "content": (
-                        "Evaluate whether the analysis covers all expected key findings.\n"
-                        "Score 1-5. Return JSON: {\"coverage\": int, \"missing\": [str], \"explanation\": str}"
+                        "Evaluate whether the analysis covers each expected key finding.\n"
+                        "For EACH finding, return 1 if the analysis addresses it or 0 if not.\n"
+                        "Return JSON: {\"finding_results\": {\"<finding>\": 0 or 1, ...}, "
+                        "\"explanation\": str}"
                     ),
                 },
                 {
@@ -126,15 +137,20 @@ class AnalystFindingsCoverageScorer(Scorer):
                     "content": (
                         f"Research query: {research_query}\n\n"
                         f"Analysis:\n{analysis[:3000]}\n\n"
-                        f"Expected key findings:\n{findings_text}"
+                        f"Expected key findings:\n{findings_list}"
                     ),
                 },
             ],
         )
         parsed = parse_json_response(response.choices[0].message.content)
+        finding_results = parsed.get("finding_results", {})
+        hits = sum(int(bool(finding_results.get(f, 0))) for f in key_findings)
+        missing = [f for f in key_findings if not finding_results.get(f, 0)]
         return {
-            "findings_coverage": parsed.get("coverage", 3) / 5.0,
-            "missing_findings": parsed.get("missing", []),
+            "finding_hits": hits,
+            "finding_total": len(key_findings),
+            "findings_coverage": hits / len(key_findings),
+            "missing_findings": missing,
             "explanation": parsed.get("explanation", ""),
         }
 

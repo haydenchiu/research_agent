@@ -34,7 +34,7 @@ def data_analyst_structure_check(output: dict) -> dict:
 
 
 class DataAnalystQualityScorer(Scorer):
-    """LLM judge: quality of the data analysis summary."""
+    """LLM judge: quality of the data analysis summary (binary per criterion)."""
 
     model_id: str = "gpt-4o-mini"
 
@@ -50,11 +50,13 @@ class DataAnalystQualityScorer(Scorer):
                 {
                     "role": "system",
                     "content": (
-                        "Evaluate a data analysis summary on these criteria (1-5 each):\n"
-                        "- clarity: is the summary easy to understand?\n"
-                        "- insight: does it provide meaningful findings?\n"
-                        "- data_grounding: are claims supported by data?\n"
-                        "Return JSON: {\"clarity\": int, \"insight\": int, \"data_grounding\": int, \"explanation\": str}"
+                        "Evaluate a data analysis summary. For each criterion, "
+                        "return 1 if satisfied or 0 if not.\n"
+                        "- clarity: the summary is easy to understand\n"
+                        "- insight: the analysis provides meaningful, non-obvious findings\n"
+                        "- data_grounding: claims are supported by specific data points\n"
+                        "Return JSON: {\"clarity\": int, \"insight\": int, "
+                        "\"data_grounding\": int, \"explanation\": str}"
                     ),
                 },
                 {
@@ -67,10 +69,14 @@ class DataAnalystQualityScorer(Scorer):
             ],
         )
         parsed = parse_json_response(response.choices[0].message.content)
+        clarity = int(bool(parsed.get("clarity", 0)))
+        insight = int(bool(parsed.get("insight", 0)))
+        data_grounding = int(bool(parsed.get("data_grounding", 0)))
         return {
-            "clarity": parsed.get("clarity", 3) / 5.0,
-            "insight": parsed.get("insight", 3) / 5.0,
-            "data_grounding": parsed.get("data_grounding", 3) / 5.0,
+            "clarity": clarity,
+            "insight": insight,
+            "data_grounding": data_grounding,
+            "score": clarity + insight + data_grounding,
             "explanation": parsed.get("explanation", ""),
         }
 

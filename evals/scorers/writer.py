@@ -71,7 +71,7 @@ def writer_key_terms(output: dict, target: dict) -> dict:
 
 
 class WriterQualityScorer(Scorer):
-    """LLM judge: writing quality rubric."""
+    """LLM judge: writing quality rubric (binary per criterion)."""
 
     model_id: str = "gpt-4o-mini"
 
@@ -87,11 +87,12 @@ class WriterQualityScorer(Scorer):
                 {
                     "role": "system",
                     "content": (
-                        "Evaluate a research report on these criteria (1-5 each):\n"
-                        "- coherence: logical flow between sections\n"
-                        "- completeness: thorough coverage of the topic\n"
-                        "- clarity: clear and understandable writing\n"
-                        "- citations: proper use of references and sources\n"
+                        "Evaluate a research report. For each criterion, "
+                        "return 1 if satisfied or 0 if not.\n"
+                        "- coherence: sections flow logically from one to the next\n"
+                        "- completeness: the topic is covered thoroughly without major gaps\n"
+                        "- clarity: the writing is clear and understandable\n"
+                        "- citations: references and sources are present and properly used\n"
                         "Return JSON: {\"coherence\": int, \"completeness\": int, "
                         "\"clarity\": int, \"citations\": int, \"explanation\": str}"
                     ),
@@ -103,11 +104,16 @@ class WriterQualityScorer(Scorer):
             ],
         )
         parsed = parse_json_response(response.choices[0].message.content)
+        coherence = int(bool(parsed.get("coherence", 0)))
+        completeness = int(bool(parsed.get("completeness", 0)))
+        clarity = int(bool(parsed.get("clarity", 0)))
+        citations = int(bool(parsed.get("citations", 0)))
         return {
-            "coherence": parsed.get("coherence", 3) / 5.0,
-            "completeness": parsed.get("completeness", 3) / 5.0,
-            "clarity": parsed.get("clarity", 3) / 5.0,
-            "citations": parsed.get("citations", 3) / 5.0,
+            "coherence": coherence,
+            "completeness": completeness,
+            "clarity": clarity,
+            "citations": citations,
+            "score": coherence + completeness + clarity + citations,
             "explanation": parsed.get("explanation", ""),
         }
 
@@ -118,7 +124,7 @@ class WriterQualityScorer(Scorer):
 
 
 class WriterTalkingPointsScorer(Scorer):
-    """LLM judge: does the report cover the gold-standard talking points?"""
+    """LLM judge: does the report cover the gold-standard talking points? (per-item hit count)"""
 
     model_id: str = "gpt-4o-mini"
 
@@ -126,7 +132,10 @@ class WriterTalkingPointsScorer(Scorer):
     def score(self, output: dict, target: dict, research_query: str) -> dict:
         report = output.get("draft_report", "")
         talking_points = target.get("talking_points", [])
-        points_text = "\n".join(f"- {p}" for p in talking_points)
+        if not talking_points:
+            return {"point_hits": 0, "point_total": 0, "talking_point_coverage": 1.0, "missing_points": []}
+
+        points_list = "\n".join(f"{i+1}. {p}" for i, p in enumerate(talking_points))
 
         client = OpenAI()
         response = client.chat.completions.create(
@@ -136,8 +145,10 @@ class WriterTalkingPointsScorer(Scorer):
                 {
                     "role": "system",
                     "content": (
-                        "Evaluate whether a research report covers the expected talking points.\n"
-                        "Score 1-5. Return JSON: {\"coverage\": int, \"missing_points\": [str], \"explanation\": str}"
+                        "Evaluate whether a research report covers each expected talking point.\n"
+                        "For EACH talking point, return 1 if the report addresses it or 0 if not.\n"
+                        "Return JSON: {\"point_results\": {\"<talking point>\": 0 or 1, ...}, "
+                        "\"explanation\": str}"
                     ),
                 },
                 {
@@ -145,15 +156,20 @@ class WriterTalkingPointsScorer(Scorer):
                     "content": (
                         f"Research query: {research_query}\n\n"
                         f"Report:\n{report[:4000]}\n\n"
-                        f"Expected talking points:\n{points_text}"
+                        f"Expected talking points:\n{points_list}"
                     ),
                 },
             ],
         )
         parsed = parse_json_response(response.choices[0].message.content)
+        point_results = parsed.get("point_results", {})
+        hits = sum(int(bool(point_results.get(p, 0))) for p in talking_points)
+        missing = [p for p in talking_points if not point_results.get(p, 0)]
         return {
-            "talking_point_coverage": parsed.get("coverage", 3) / 5.0,
-            "missing_points": parsed.get("missing_points", []),
+            "point_hits": hits,
+            "point_total": len(talking_points),
+            "talking_point_coverage": hits / len(talking_points),
+            "missing_points": missing,
             "explanation": parsed.get("explanation", ""),
         }
 

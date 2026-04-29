@@ -55,7 +55,7 @@ def searcher_url_recall(output: dict, target: dict) -> dict:
 
 
 class SearcherRelevanceScorer(Scorer):
-    """LLM judge: are the search results relevant to the sub-questions?"""
+    """LLM judge: are the search results relevant to the sub-questions? (binary rubric)"""
 
     model_id: str = "gpt-4o-mini"
 
@@ -75,8 +75,13 @@ class SearcherRelevanceScorer(Scorer):
                 {
                     "role": "system",
                     "content": (
-                        "Evaluate whether search results are relevant to the research sub-questions.\n"
-                        "Score 1-5. Return JSON: {\"relevance\": int, \"explanation\": str}"
+                        "Evaluate search results against the research sub-questions. "
+                        "For each criterion, return 1 if satisfied or 0 if not.\n"
+                        "- relevance: do the results address the sub-questions?\n"
+                        "- coverage: do the results cover most of the sub-questions?\n"
+                        "- quality: are the sources substantive (not shallow/empty)?\n"
+                        "Return JSON: {\"relevance\": int, \"coverage\": int, "
+                        "\"quality\": int, \"explanation\": str}"
                     ),
                 },
                 {
@@ -86,8 +91,14 @@ class SearcherRelevanceScorer(Scorer):
             ],
         )
         parsed = parse_json_response(response.choices[0].message.content)
+        relevance = int(bool(parsed.get("relevance", 0)))
+        coverage = int(bool(parsed.get("coverage", 0)))
+        quality = int(bool(parsed.get("quality", 0)))
         return {
-            "result_relevance": parsed.get("relevance", 3) / 5.0,
+            "relevance": relevance,
+            "coverage": coverage,
+            "quality": quality,
+            "score": relevance + coverage + quality,
             "explanation": parsed.get("explanation", ""),
         }
 

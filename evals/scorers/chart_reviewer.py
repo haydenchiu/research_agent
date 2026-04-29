@@ -33,7 +33,7 @@ def chart_reviewer_structure_check(output: dict) -> dict:
 
 
 class ChartReviewThoroughnessScorer(Scorer):
-    """LLM judge: how thorough is the chart review?"""
+    """LLM judge: how thorough is the chart review? (binary per criterion)"""
 
     model_id: str = "gpt-4o-mini"
 
@@ -51,11 +51,12 @@ class ChartReviewThoroughnessScorer(Scorer):
                 {
                     "role": "system",
                     "content": (
-                        "Evaluate a chart review for thoroughness using this rubric (1-5 each):\n"
-                        "- axes_check: did the review assess axis labels and scales?\n"
-                        "- title_check: did it assess chart titles?\n"
-                        "- readability: did it assess visual clarity and readability?\n"
-                        "- data_accuracy: did it assess whether the chart accurately represents the data?\n"
+                        "Evaluate a chart review for thoroughness. For each criterion, "
+                        "return 1 if the review addressed it or 0 if not.\n"
+                        "- axes_check: the review assessed axis labels and scales\n"
+                        "- title_check: the review assessed chart titles\n"
+                        "- readability: the review assessed visual clarity and readability\n"
+                        "- data_accuracy: the review assessed whether the chart accurately represents the data\n"
                         "Return JSON: {\"axes_check\": int, \"title_check\": int, "
                         "\"readability\": int, \"data_accuracy\": int, \"explanation\": str}"
                     ),
@@ -72,11 +73,16 @@ class ChartReviewThoroughnessScorer(Scorer):
             ],
         )
         parsed = parse_json_response(response.choices[0].message.content)
+        axes_check = int(bool(parsed.get("axes_check", 0)))
+        title_check = int(bool(parsed.get("title_check", 0)))
+        readability = int(bool(parsed.get("readability", 0)))
+        data_accuracy = int(bool(parsed.get("data_accuracy", 0)))
         return {
-            "axes_check": parsed.get("axes_check", 3) / 5.0,
-            "title_check": parsed.get("title_check", 3) / 5.0,
-            "readability": parsed.get("readability", 3) / 5.0,
-            "data_accuracy": parsed.get("data_accuracy", 3) / 5.0,
+            "axes_check": axes_check,
+            "title_check": title_check,
+            "readability": readability,
+            "data_accuracy": data_accuracy,
+            "score": axes_check + title_check + readability + data_accuracy,
             "explanation": parsed.get("explanation", ""),
         }
 

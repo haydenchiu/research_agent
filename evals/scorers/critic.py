@@ -48,7 +48,7 @@ def critic_verdict_accuracy(output: dict, target: dict) -> dict:
 
 
 class CriticFeedbackQualityScorer(Scorer):
-    """LLM judge: is the feedback specific and actionable?"""
+    """LLM judge: is the feedback specific and actionable? (binary per criterion)"""
 
     model_id: str = "gpt-4o-mini"
 
@@ -66,10 +66,13 @@ class CriticFeedbackQualityScorer(Scorer):
                 {
                     "role": "system",
                     "content": (
-                        "Evaluate a research critique on these criteria (1-5 each):\n"
-                        "- specificity: does it identify concrete issues?\n"
-                        "- actionability: does it suggest clear next steps?\n"
-                        "Return JSON: {\"specificity\": int, \"actionability\": int, \"explanation\": str}"
+                        "Evaluate a research critique. For each criterion, "
+                        "return 1 if satisfied or 0 if not.\n"
+                        "- specificity: the critique identifies concrete, specific issues\n"
+                        "- actionability: the critique suggests clear, actionable next steps\n"
+                        "- completeness: the critique addresses all major aspects of the analysis\n"
+                        "Return JSON: {\"specificity\": int, \"actionability\": int, "
+                        "\"completeness\": int, \"explanation\": str}"
                     ),
                 },
                 {
@@ -84,9 +87,14 @@ class CriticFeedbackQualityScorer(Scorer):
             ],
         )
         parsed = parse_json_response(response.choices[0].message.content)
+        specificity = int(bool(parsed.get("specificity", 0)))
+        actionability = int(bool(parsed.get("actionability", 0)))
+        completeness = int(bool(parsed.get("completeness", 0)))
         return {
-            "specificity": parsed.get("specificity", 3) / 5.0,
-            "actionability": parsed.get("actionability", 3) / 5.0,
+            "specificity": specificity,
+            "actionability": actionability,
+            "completeness": completeness,
+            "score": specificity + actionability + completeness,
             "explanation": parsed.get("explanation", ""),
         }
 

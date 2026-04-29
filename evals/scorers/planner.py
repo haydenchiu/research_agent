@@ -52,7 +52,7 @@ def planner_theme_overlap(output: dict, target: dict) -> dict:
 
 
 class PlannerRelevanceScorer(Scorer):
-    """LLM judge: are the sub-questions relevant and diverse?"""
+    """LLM judge: are the sub-questions relevant and diverse? (binary rubric)"""
 
     model_id: str = "gpt-4o-mini"
 
@@ -69,10 +69,13 @@ class PlannerRelevanceScorer(Scorer):
                 {
                     "role": "system",
                     "content": (
-                        "You evaluate research sub-questions. Score from 1-5 on:\n"
-                        "- relevance: do questions address the research query?\n"
-                        "- diversity: do questions cover different angles?\n"
-                        "Return JSON: {\"relevance\": int, \"diversity\": int, \"explanation\": str}"
+                        "You evaluate research sub-questions. For each criterion, "
+                        "return 1 if the criterion is satisfied or 0 if not.\n"
+                        "- relevance: do the questions address the research query?\n"
+                        "- diversity: do the questions cover meaningfully different angles?\n"
+                        "- specificity: are the questions specific enough to guide research?\n"
+                        "Return JSON: {\"relevance\": int, \"diversity\": int, "
+                        "\"specificity\": int, \"explanation\": str}"
                     ),
                 },
                 {
@@ -82,11 +85,14 @@ class PlannerRelevanceScorer(Scorer):
             ],
         )
         parsed = parse_json_response(response.choices[0].message.content)
-        relevance = parsed.get("relevance", 3) / 5.0
-        diversity = parsed.get("diversity", 3) / 5.0
+        relevance = int(bool(parsed.get("relevance", 0)))
+        diversity = int(bool(parsed.get("diversity", 0)))
+        specificity = int(bool(parsed.get("specificity", 0)))
         return {
             "relevance": relevance,
             "diversity": diversity,
+            "specificity": specificity,
+            "score": relevance + diversity + specificity,
             "explanation": parsed.get("explanation", ""),
         }
 
@@ -97,7 +103,7 @@ class PlannerRelevanceScorer(Scorer):
 
 
 class PlannerCoverageScorer(Scorer):
-    """LLM judge: do the sub-questions cover the expected themes?"""
+    """LLM judge: do the sub-questions cover the expected themes? (per-item hit count)"""
 
     model_id: str = "gpt-4o-mini"
 
@@ -105,8 +111,11 @@ class PlannerCoverageScorer(Scorer):
     def score(self, output: dict, target: dict, research_query: str) -> dict:
         questions = output.get("sub_questions", [])
         expected_themes = target.get("expected_themes", [])
+        if not expected_themes:
+            return {"theme_hits": 0, "theme_total": 0, "theme_coverage_llm": 1.0, "missing_themes": []}
+
         questions_text = "\n".join(f"- {q}" for q in questions)
-        themes_text = "\n".join(f"- {t}" for t in expected_themes)
+        themes_list = "\n".join(f"{i+1}. {t}" for i, t in enumerate(expected_themes))
 
         client = OpenAI()
         response = client.chat.completions.create(
@@ -116,9 +125,10 @@ class PlannerCoverageScorer(Scorer):
                 {
                     "role": "system",
                     "content": (
-                        "You evaluate whether research sub-questions cover expected themes.\n"
-                        "Score from 1-5 how well the questions address all expected themes.\n"
-                        "Return JSON: {\"coverage_score\": int, \"missing_themes\": [str], \"explanation\": str}"
+                        "You evaluate whether research sub-questions cover each expected theme.\n"
+                        "For EACH theme, return 1 if the sub-questions address it or 0 if not.\n"
+                        "Return JSON: {\"theme_results\": {\"<theme>\": 0 or 1, ...}, "
+                        "\"explanation\": str}"
                     ),
                 },
                 {
@@ -126,15 +136,20 @@ class PlannerCoverageScorer(Scorer):
                     "content": (
                         f"Research query: {research_query}\n\n"
                         f"Sub-questions:\n{questions_text}\n\n"
-                        f"Expected themes:\n{themes_text}"
+                        f"Expected themes:\n{themes_list}"
                     ),
                 },
             ],
         )
         parsed = parse_json_response(response.choices[0].message.content)
+        theme_results = parsed.get("theme_results", {})
+        hits = sum(int(bool(theme_results.get(t, 0))) for t in expected_themes)
+        missing = [t for t in expected_themes if not theme_results.get(t, 0)]
         return {
-            "theme_coverage_llm": parsed.get("coverage_score", 3) / 5.0,
-            "missing_themes": parsed.get("missing_themes", []),
+            "theme_hits": hits,
+            "theme_total": len(expected_themes),
+            "theme_coverage_llm": hits / len(expected_themes),
+            "missing_themes": missing,
             "explanation": parsed.get("explanation", ""),
         }
 
