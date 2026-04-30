@@ -23,14 +23,14 @@ def _route_after_critic(
     revision_count = state.get("revision_count", 0)
     max_revisions = state.get("max_revisions", DEFAULT_MAX_REVISIONS)
 
-    if critique.get("needs_data_analysis"):
-        return "data_analyst"
-
     if not critique.get("approved") and revision_count < max_revisions:
         gaps = critique.get("gaps", [])
         extra_queries = critique.get("additional_search_queries", [])
         if gaps or extra_queries:
             return "searcher"
+
+    if critique.get("needs_data_analysis"):
+        return "data_analyst"
 
     return "writer"
 
@@ -41,7 +41,10 @@ def _route_after_chart_reviewer(
     chart_review = state.get("chart_review", {})
     chart_revision_count = state.get("chart_revision_count", 0)
 
-    if not chart_review.get("approved") and chart_revision_count < DEFAULT_MAX_CHART_REVISIONS:
+    if (
+        not chart_review.get("approved")
+        and chart_revision_count < DEFAULT_MAX_CHART_REVISIONS
+    ):
         return "data_analyst"
 
     return "writer"
