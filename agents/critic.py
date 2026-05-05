@@ -43,7 +43,6 @@ class CriticAgent(weave.Model):
         critique = {
             "approved": parsed.get("approved", False),
             "gaps": parsed.get("gaps", []),
-            "needs_data_analysis": parsed.get("needs_data_analysis", False),
             "feedback": parsed.get("feedback", ""),
             "additional_search_queries": parsed.get("additional_search_queries", []),
         }
@@ -69,10 +68,8 @@ class CriticAgent(weave.Model):
                 new_sub_questions = extra_queries
 
         status = "approved" if critique["approved"] else "revision requested"
-        data_flag = " (data analysis needed)" if critique["needs_data_analysis"] else ""
 
-        result["data_analysis_needed"] = critique["needs_data_analysis"]
         result["sub_questions"] = new_sub_questions
         result["revision_count"] = revision_count + 1
-        result["messages"] = [log_agent("critic", f"Review: {status}{data_flag}")]
+        result["messages"] = [log_agent("critic", f"Review: {status}")]
         return result

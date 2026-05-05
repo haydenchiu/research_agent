@@ -19,24 +19,16 @@ class WriterAgent(weave.Model):
         self,
         research_query: str,
         analysis: str,
-        data_analysis_result: str = "",
-        chart_paths: list[str] | None = None,
         format_issues: list[str] | None = None,
     ) -> dict:
         llm = build_llm(self.provider, self.model_name, self.temperature, self.max_tokens)
         system_prompt = load_prompt("writer")
-        chart_paths = chart_paths or []
         format_issues = format_issues or []
 
         context_parts = [
             f"Original research question: {research_query}",
             f"\n## Analysis\n{analysis}",
         ]
-        if data_analysis_result:
-            context_parts.append(f"\n## Data Analysis Results\n{data_analysis_result}")
-        if chart_paths:
-            chart_refs = "\n".join(f"- ![Chart {i+1}]({p})" for i, p in enumerate(chart_paths))
-            context_parts.append(f"\n## Available Charts\n{chart_refs}")
         if format_issues:
             issues_text = "\n".join(f"- {iss}" for iss in format_issues)
             context_parts.append(
@@ -56,8 +48,6 @@ class WriterAgent(weave.Model):
         result = self.predict(
             research_query=state["research_query"],
             analysis=state.get("analysis", ""),
-            data_analysis_result=state.get("data_analysis_result", ""),
-            chart_paths=state.get("chart_paths", []),
             format_issues=state.get("format_issues", []),
         )
         result["messages"] = [log_agent("writer", "Produced research report draft")]

@@ -28,9 +28,7 @@ TRACE_FIELDS_PER_AGENT = {
     "searcher": ["sub_questions", "search_results"],
     "analyst": ["research_query", "search_results", "analysis"],
     "critic": ["research_query", "analysis", "revision_count", "max_revisions", "critique"],
-    "data_analyst": ["research_query", "analysis", "critique", "chart_review", "data_analysis_result", "chart_paths"],
-    "chart_reviewer": ["chart_paths", "data_analysis_result", "chart_review"],
-    "writer": ["research_query", "analysis", "data_analysis_result", "chart_paths", "format_issues", "draft_report"],
+    "writer": ["research_query", "analysis", "format_issues", "draft_report"],
     "format_checker": ["draft_report", "final_report", "format_issues"],
 }
 
@@ -83,11 +81,6 @@ def run(
         "search_results": [],
         "analysis": "",
         "critique": {},
-        "data_analysis_needed": False,
-        "data_analysis_result": "",
-        "chart_paths": [],
-        "chart_review": {},
-        "chart_revision_count": 0,
         "draft_report": "",
         "format_issues": [],
         "final_report": "",

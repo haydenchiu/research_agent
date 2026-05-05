@@ -43,16 +43,6 @@ AGENT_REGISTRY = {
         "model_class": "CriticAgent",
         "scorer_module": "evals.scorers.critic",
     },
-    "data_analyst": {
-        "model_module": "agents.data_analyst",
-        "model_class": "DataAnalystAgent",
-        "scorer_module": "evals.scorers.data_analyst",
-    },
-    "chart_reviewer": {
-        "model_module": "agents.chart_reviewer",
-        "model_class": "ChartReviewerAgent",
-        "scorer_module": "evals.scorers.chart_reviewer",
-    },
     "writer": {
         "model_module": "agents.writer",
         "model_class": "WriterAgent",

@@ -10,10 +10,7 @@ load_dotenv()
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 PROMPTS_DIR = PROJECT_ROOT / "prompts"
 OUTPUT_DIR = PROJECT_ROOT / "output"
-CHARTS_DIR = OUTPUT_DIR / "charts"
-
 DEFAULT_MAX_REVISIONS = 3
-DEFAULT_MAX_CHART_REVISIONS = 2
 
 
 def get_api_key(provider: str) -> str:

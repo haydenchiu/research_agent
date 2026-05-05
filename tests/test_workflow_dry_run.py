@@ -64,8 +64,6 @@ CRITIC_APPROVED_RESPONSE = json.dumps(
         "approved": True,
         "overall_quality": "good",
         "gaps": [],
-        "needs_data_analysis": False,
-        "data_analysis_suggestion": "",
         "feedback": "Analysis is comprehensive and well-supported.",
         "additional_search_queries": [],
     }
@@ -148,8 +146,6 @@ AGENT_RESPONSE_MAP = {
     "searcher": SEARCHER_RESPONSE,
     "analyst": ANALYST_RESPONSE,
     "critic": CRITIC_APPROVED_RESPONSE,
-    "data_analyst": "{}",
-    "chart_reviewer": '{"approved": true, "issues": [], "suggestions": []}',
     "writer": WRITER_RESPONSE,
     "format_checker": FORMAT_CHECKER_PASS,
 }
@@ -178,14 +174,12 @@ def test_graph_topology():
         "searcher",
         "analyst",
         "critic",
-        "data_analyst",
-        "chart_reviewer",
         "writer",
         "format_checker",
     }
     # __start__ is added by LangGraph
     assert expected.issubset(node_names), f"Missing nodes: {expected - node_names}"
-    print("  [PASS] Graph topology has all 8 agent nodes")
+    print("  [PASS] Graph topology has all 6 agent nodes")
 
 
 def _build_llm_for_agent(agent_class_name: str):
@@ -195,8 +189,6 @@ def _build_llm_for_agent(agent_class_name: str):
         "SearcherAgent": "searcher",
         "AnalystAgent": "analyst",
         "CriticAgent": "critic",
-        "DataAnalystAgent": "data_analyst",
-        "ChartReviewerAgent": "chart_reviewer",
         "WriterAgent": "writer",
         "FormatCheckerAgent": "format_checker",
     }
@@ -210,8 +202,6 @@ def _mock_build_llm_by_model(provider, model_name, temperature=0.3, max_tokens=4
         ("openai", "gpt-4o-mini", 0.1, 4096): "searcher",
         ("anthropic", "claude-sonnet-4-20250514", 0.3, 4096): "analyst",
         ("openai", "gpt-4o", 0.4, 4096): "critic",
-        ("openai", "gpt-4o", 0.3, 4096): "data_analyst",
-        ("openai", "gpt-4o", 0.2, 4096): "chart_reviewer",
         ("anthropic", "claude-sonnet-4-20250514", 0.3, 8192): "writer",
         ("openai", "gpt-4o-mini", 0.1, 4096): "format_checker",
     }
@@ -233,8 +223,6 @@ def test_full_workflow_happy_path():
             AGENT_RESPONSE_MAP.get({
                 (0.1, 4096): "searcher",
                 (0.4, 4096): "critic",
-                (0.3, 4096): "data_analyst",
-                (0.2, 4096): "chart_reviewer",
             }.get((kw.get("temperature"), kw.get("max_tokens")), "format_checker"), "{}")
         )),
         patch("agents.llm_factory.ChatAnthropic", side_effect=lambda **kw: _make_mock_llm(
@@ -250,11 +238,6 @@ def test_full_workflow_happy_path():
             "search_results": [],
             "analysis": "",
             "critique": {},
-            "data_analysis_needed": False,
-            "data_analysis_result": "",
-            "chart_paths": [],
-            "chart_review": {},
-            "chart_revision_count": 0,
             "draft_report": "",
             "format_issues": [],
             "final_report": "",
@@ -299,7 +282,6 @@ def test_full_workflow_happy_path():
 def test_routing_logic():
     """Test the conditional routing functions directly."""
     from graph.workflow import (
-        _route_after_chart_reviewer,
         _route_after_critic,
         _route_after_format_checker,
     )
@@ -320,14 +302,6 @@ def test_routing_logic():
     }
     assert _route_after_critic(state_gaps) == "searcher"
 
-    # Critic: needs data analysis -> data_analyst
-    state_data = {
-        "critique": {"approved": False, "needs_data_analysis": True},
-        "revision_count": 1,
-        "max_revisions": 3,
-    }
-    assert _route_after_critic(state_data) == "data_analyst"
-
     # Critic: max revisions exceeded -> writer
     state_max = {
         "critique": {"approved": False, "gaps": ["still missing"]},
@@ -335,18 +309,6 @@ def test_routing_logic():
         "max_revisions": 3,
     }
     assert _route_after_critic(state_max) == "writer"
-
-    # Chart reviewer: approved -> writer
-    assert _route_after_chart_reviewer({"chart_review": {"approved": True}, "chart_revision_count": 0}) == "writer"
-
-    # Chart reviewer: not approved, revisions left -> data_analyst
-    assert (
-        _route_after_chart_reviewer({"chart_review": {"approved": False}, "chart_revision_count": 0})
-        == "data_analyst"
-    )
-
-    # Chart reviewer: not approved but max revisions -> writer
-    assert _route_after_chart_reviewer({"chart_review": {"approved": False}, "chart_revision_count": 2}) == "writer"
 
     # Format checker: no issues -> end
     assert _route_after_format_checker({"format_issues": [], "format_revision_count": 1}) == "__end__"
