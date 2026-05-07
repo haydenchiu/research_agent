@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+
 import weave
 from langchain_core.messages import HumanMessage, SystemMessage
 
@@ -39,9 +41,13 @@ class SearcherAgent(weave.Model):
             ]
         )
 
-        parse_json_response(response.content)
+        try:
+            parsed = parse_json_response(response.content)
+            findings = parsed.get("findings", [])
+        except (ValueError, json.JSONDecodeError):
+            findings = []
 
-        return {"search_results": all_results}
+        return {"search_results": all_results, "findings": findings}
 
     def node(self, state: ResearchState) -> dict:
         sub_questions = state.get("sub_questions", [])

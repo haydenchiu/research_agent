@@ -3,24 +3,96 @@
     "id": "planner_ai_labor",
     "research_query": "What are the economic impacts of AI on the labor market?",
     "target": {
-      "min_questions": 3,
-      "expected_themes": ["adoption", "job displacement", "new job creation", "policy"]
+      "expected_sub_questions": [
+        {
+          "question": "What is the current state of AI adoption across major industries?",
+          "source_hint": "industry reports"
+        },
+        {
+          "question": "Which job categories and sectors are most vulnerable to displacement by AI automation?",
+          "source_hint": "academic papers"
+        },
+        {
+          "question": "What new roles and job categories are being created as a result of AI?",
+          "source_hint": "industry reports"
+        },
+        {
+          "question": "How is AI affecting wages, income distribution, and economic inequality?",
+          "source_hint": "government data"
+        },
+        {
+          "question": "What workforce retraining programs and policies are governments implementing to address AI-driven labor shifts?",
+          "source_hint": "government data"
+        },
+        {
+          "question": "What are the limitations and risks of over-relying on AI in the economy?",
+          "source_hint": "academic papers"
+        }
+      ]
     }
   },
   {
     "id": "planner_climate",
     "research_query": "How effective are current carbon capture technologies in mitigating climate change?",
     "target": {
-      "min_questions": 3,
-      "expected_themes": ["carbon capture methods", "cost effectiveness", "scalability", "environmental impact"]
+      "expected_sub_questions": [
+        {
+          "question": "What are the main types of carbon capture technologies currently in use or development?",
+          "source_hint": "academic papers"
+        },
+        {
+          "question": "How much CO2 can each major carbon capture method realistically remove per year?",
+          "source_hint": "government data"
+        },
+        {
+          "question": "What are the costs per ton of CO2 captured for each technology?",
+          "source_hint": "industry reports"
+        },
+        {
+          "question": "How do carbon capture technologies compare to natural carbon sinks like forests and oceans?",
+          "source_hint": "academic papers"
+        },
+        {
+          "question": "What are the energy requirements and environmental side effects of carbon capture?",
+          "source_hint": "academic papers"
+        },
+        {
+          "question": "What are the main criticisms and limitations of relying on carbon capture as a climate solution?",
+          "source_hint": "news articles"
+        }
+      ]
     }
   },
   {
     "id": "planner_remote_work",
     "research_query": "What are the long-term effects of remote work on productivity and employee wellbeing?",
     "target": {
-      "min_questions": 3,
-      "expected_themes": ["productivity", "mental health", "work-life balance", "collaboration"]
+      "expected_sub_questions": [
+        {
+          "question": "What does the research say about how remote work affects individual productivity compared to in-office work?",
+          "source_hint": "academic papers"
+        },
+        {
+          "question": "How does remote work impact employee mental health and work-life balance?",
+          "source_hint": "academic papers"
+        },
+        {
+          "question": "What are the effects of remote work on team collaboration and communication?",
+          "source_hint": "industry reports"
+        },
+        {
+          "question": "How do remote work outcomes vary across different industries and job types?",
+          "source_hint": "industry reports"
+        },
+        {
+          "question": "What management practices and tools are most effective for supporting remote teams?",
+          "source_hint": "industry reports"
+        },
+        {
+          "question": "What are the potential downsides and long-term risks of widespread remote work adoption?",
+          "source_hint": "news articles"
+        }
+      ]
     }
   }
 ]

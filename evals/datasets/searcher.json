@@ -1,24 +1,98 @@
 [
   {
     "id": "searcher_ai_labor",
+    "research_query": "What are the economic impacts of AI on the labor market?",
     "sub_questions": [
-      "What is the current state of AI adoption in workplaces?",
-      "What jobs are most affected by AI automation?",
-      "What are the counterarguments to AI job displacement?"
+      "What is the current state of AI adoption across major industries?",
+      "Which job categories are most vulnerable to displacement by AI automation?",
+      "What new roles and job categories are being created as a result of AI?",
+      "How is AI affecting wages and income inequality?",
+      "What workforce retraining programs are governments implementing to address AI-driven labor shifts?"
     ],
     "target": {
-      "expected_urls": []
+      "expected_facts": [
+        "Goldman Sachs",
+        "300 million",
+        "McKinsey",
+        "World Economic Forum",
+        "generative AI"
+      ],
+      "expected_urls": [
+        "https://www.mckinsey.com/featured-insights/future-of-work",
+        "https://www.weforum.org/publications/the-future-of-jobs-report-2023/",
+        "https://www.bls.gov/ooh/"
+      ],
+      "expected_domains": [
+        "mckinsey.com",
+        "weforum.org",
+        "bls.gov",
+        "brookings.edu",
+        "imf.org"
+      ]
     }
   },
   {
-    "id": "searcher_climate",
+    "id": "searcher_carbon_capture",
+    "research_query": "How effective are current carbon capture technologies in mitigating climate change?",
     "sub_questions": [
-      "What are the main carbon capture technologies currently in use?",
-      "How cost-effective is direct air capture compared to other methods?",
-      "What is the current global capacity for carbon capture and storage?"
+      "What are the main types of carbon capture technologies currently in use or development?",
+      "How much CO2 can each major carbon capture method realistically remove per year?",
+      "What are the costs per ton of CO2 captured for each technology?",
+      "How do carbon capture technologies compare to natural carbon sinks like forests and oceans?",
+      "What are the main criticisms and limitations of relying on carbon capture as a climate solution?"
     ],
     "target": {
-      "expected_urls": []
+      "expected_facts": [
+        "direct air capture",
+        "IPCC",
+        "CCS",
+        "megatonne",
+        "$100"
+      ],
+      "expected_urls": [
+        "https://www.iea.org/energy-system/carbon-capture-utilisation-and-storage",
+        "https://www.energy.gov/fecm/carbon-capture-utilization-and-storage",
+        "https://www.ipcc.ch/report/ar6/wg3/"
+      ],
+      "expected_domains": [
+        "iea.org",
+        "energy.gov",
+        "ipcc.ch",
+        "nature.com",
+        "science.org"
+      ]
+    }
+  },
+  {
+    "id": "searcher_remote_work",
+    "research_query": "What are the long-term effects of remote work on productivity and employee wellbeing?",
+    "sub_questions": [
+      "What does the research say about how remote work affects individual productivity compared to in-office work?",
+      "How does remote work impact employee mental health and work-life balance?",
+      "What are the effects of remote work on team collaboration and communication?",
+      "How do remote work outcomes vary across different industries and job types?",
+      "What management practices and tools are most effective for supporting remote teams?"
+    ],
+    "target": {
+      "expected_facts": [
+        "Stanford",
+        "13%",
+        "hybrid",
+        "Gallup",
+        "burnout"
+      ],
+      "expected_urls": [
+        "https://nbloom.people.stanford.edu/research",
+        "https://www.gallup.com/workplace/283985/working-remotely-effective-gallup-research-says-yes.aspx",
+        "https://hbr.org/topic/remote-work"
+      ],
+      "expected_domains": [
+        "stanford.edu",
+        "gallup.com",
+        "hbr.org",
+        "mckinsey.com",
+        "nber.org"
+      ]
     }
   }
 ]
