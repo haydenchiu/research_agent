@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import inspect
 import json
 import sys
 from importlib import import_module
@@ -63,15 +64,40 @@ def _load_model(agent_name: str) -> weave.Model:
     return cls()
 
 
-def _load_scorers(agent_name: str) -> list:
+def _load_scorers(agent_name: str, gt_free: bool = False) -> list:
     info = AGENT_REGISTRY[agent_name]
     mod = import_module(info["scorer_module"])
-    return mod.get_scorers()
+    scorers = mod.get_scorers()
+    if gt_free:
+        scorers = [s for s in scorers if _is_gt_free_scorer(s)]
+    return scorers
 
 
-def _load_dataset(agent_name: str, dataset_path: str | None = None) -> list[dict]:
+def _is_gt_free_scorer(scorer) -> bool:
+    """True when the scorer's call signature has no ``target`` parameter."""
+    try:
+        if hasattr(scorer, "score") and callable(scorer.score):
+            sig = inspect.signature(scorer.score)
+        elif callable(scorer):
+            sig = inspect.signature(scorer)
+        else:
+            return True
+        return "target" not in sig.parameters
+    except (ValueError, TypeError):
+        return True
+
+
+def _load_dataset(
+    agent_name: str,
+    dataset_path: str | None = None,
+    gt_free: bool = False,
+) -> list[dict]:
     if dataset_path:
         path = Path(dataset_path)
+    elif gt_free:
+        trace_path = DATASETS_DIR / f"{agent_name}_traces.json"
+        default_path = DATASETS_DIR / f"{agent_name}.json"
+        path = trace_path if trace_path.exists() else default_path
     else:
         path = DATASETS_DIR / f"{agent_name}.json"
     if not path.exists():
@@ -81,15 +107,23 @@ def _load_dataset(agent_name: str, dataset_path: str | None = None) -> list[dict
         return json.load(f)
 
 
-async def run_eval(agent_name: str, dataset_path: str | None = None) -> dict:
+async def run_eval(
+    agent_name: str,
+    dataset_path: str | None = None,
+    gt_free: bool = False,
+) -> dict:
     """Run evaluation for a single agent and return results."""
     print(f"\n{'='*60}")
-    print(f"  Evaluating: {agent_name}")
+    print(f"  Evaluating: {agent_name}" + (" (GT-free)" if gt_free else ""))
     print(f"{'='*60}")
 
     model = _load_model(agent_name)
-    scorers = _load_scorers(agent_name)
-    dataset = _load_dataset(agent_name, dataset_path)
+    scorers = _load_scorers(agent_name, gt_free=gt_free)
+    dataset = _load_dataset(agent_name, dataset_path, gt_free=gt_free)
+
+    if not scorers:
+        print(f"  No {'GT-free ' if gt_free else ''}scorers available, skipping")
+        return {}
 
     print(f"  Model:    {model.__class__.__name__}")
     print(f"  Scorers:  {len(scorers)}")
@@ -128,6 +162,8 @@ def main() -> None:
             '  python -m evals.run --agent planner\n'
             '  python -m evals.run --all\n'
             '  python -m evals.run --agent writer --dataset path/to/custom.json\n'
+            '  python -m evals.run --all --gt-free              # GT-free scorers only\n'
+            '  python -m evals.run --agent planner --gt-free    # uses *_traces.json if available\n'
         ),
     )
     parser.add_argument(
@@ -149,6 +185,14 @@ def main() -> None:
         default="research-agent",
         help="Weave project name (default: research-agent)",
     )
+    parser.add_argument(
+        "--gt-free",
+        action="store_true",
+        help=(
+            "Run only ground-truth-free scorers (structural checks + LLM rubrics). "
+            "Auto-selects *_traces.json datasets when available."
+        ),
+    )
     args = parser.parse_args()
 
     if not args.agent and not args.all:
@@ -165,7 +209,9 @@ def main() -> None:
     all_results = {}
     for agent_name in agents:
         dataset_path = args.dataset if len(agents) == 1 else None
-        result = asyncio.run(run_eval(agent_name, dataset_path))
+        result = asyncio.run(
+            run_eval(agent_name, dataset_path, gt_free=args.gt_free)
+        )
         all_results[agent_name] = result
 
     print(f"\n{'='*60}")
