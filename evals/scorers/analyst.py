@@ -1,4 +1,10 @@
-"""Analyst agent scorers."""
+"""Analyst agent scorers (all 4 quadrants of the 2x2 eval matrix).
+
+1. W/ GT  & Code  – Key-term overlap
+2. W/o GT & Code  – Inline citation density + structural integrity
+3. W/ GT  & LLM   – Key-findings coverage
+4. W/o GT & LLM   – 4-point binary rubric (thematic synthesis, nuance, tone, gaps)
+"""
 
 from __future__ import annotations
 
@@ -11,29 +17,73 @@ from weave import Scorer
 from agents.utils import parse_json_response
 
 # ---------------------------------------------------------------------------
-# Code / No Ground Truth
+# Helpers
 # ---------------------------------------------------------------------------
 
-URL_PATTERN = re.compile(r"https?://\S+")
-HEADER_PATTERN = re.compile(r"^#{1,6}\s+", re.MULTILINE)
+SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+")
+CITATION_PATTERN = re.compile(r"\[([^\]]+)\]\([^)]+\)")
+HEADER_PATTERN = re.compile(r"^#{1,6}\s+(.+)", re.MULTILINE)
+
+
+def _extract_headers(text: str) -> list[str]:
+    """Return lowercased header text for every markdown heading in *text*."""
+    return [m.group(1).strip().lower() for m in HEADER_PATTERN.finditer(text)]
+
+
+# ---------------------------------------------------------------------------
+# 2. W/o GT & Code – Inline Citation Density + Structural Integrity
+# ---------------------------------------------------------------------------
+
+_CITATION_WINDOW = 3  # at least 1 citation per N sentences
 
 
 @weave.op()
-def analyst_structure_check(output: dict) -> dict:
-    """Check minimum length, markdown headers, and citations."""
+def analyst_citation_density(output: dict) -> dict:
+    """Regex check: for every N sentences there is at least one [Source Title](URL) citation."""
     analysis = output.get("analysis", "")
-    has_min_length = len(analysis) >= 500
-    has_headers = bool(HEADER_PATTERN.search(analysis))
-    has_citations = bool(URL_PATTERN.search(analysis))
+    sentences = [s.strip() for s in SENTENCE_SPLIT.split(analysis) if s.strip()]
+    if not sentences:
+        return {"citation_density_pass": False, "windows_checked": 0, "windows_passed": 0}
+
+    windows_checked = 0
+    windows_passed = 0
+    for start in range(0, len(sentences), _CITATION_WINDOW):
+        window = " ".join(sentences[start : start + _CITATION_WINDOW])
+        windows_checked += 1
+        if CITATION_PATTERN.search(window):
+            windows_passed += 1
+
+    all_pass = windows_passed == windows_checked
     return {
-        "has_min_length": has_min_length,
-        "has_headers": has_headers,
-        "has_citations": has_citations,
+        "citation_density_pass": all_pass,
+        "windows_checked": windows_checked,
+        "windows_passed": windows_passed,
+        "citation_density_ratio": windows_passed / windows_checked if windows_checked else 0.0,
+    }
+
+
+@weave.op()
+def analyst_structural_integrity(output: dict) -> dict:
+    """Verify mandatory sections: one about gaps in evidence and one about consensus/disagreement."""
+    analysis = output.get("analysis", "")
+    headers = _extract_headers(analysis)
+    full_text_lower = analysis.lower()
+
+    has_gaps_section = any("gap" in h for h in headers) or "gaps in evidence" in full_text_lower
+    has_consensus_section = (
+        any("consensus" in h or "disagreement" in h for h in headers)
+        or "consensus and disagreement" in full_text_lower
+    )
+
+    return {
+        "has_gaps_section": has_gaps_section,
+        "has_consensus_section": has_consensus_section,
+        "structural_integrity_pass": has_gaps_section and has_consensus_section,
     }
 
 
 # ---------------------------------------------------------------------------
-# Code / With Ground Truth
+# 1. W/ GT & Code – Key-term overlap
 # ---------------------------------------------------------------------------
 
 
@@ -50,12 +100,25 @@ def analyst_term_overlap(output: dict, target: dict) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# LLM / No Ground Truth
+# 4. W/o GT & LLM – 4-point binary rubric
 # ---------------------------------------------------------------------------
 
+_RUBRIC_CRITERIA = [
+    "thematic_synthesis",
+    "nuance_and_conflict",
+    "objective_tone",
+    "gap_identification",
+]
 
-class AnalystQualityScorer(Scorer):
-    """LLM judge: coherence, depth, and balance of the analysis (binary per criterion)."""
+
+class AnalystRubricScorer(Scorer):
+    """LLM judge: 4-point binary rubric (no ground truth needed).
+
+    1. Thematic Synthesis  – organised by themes, not by sub-question
+    2. Nuance & Conflict   – explicitly contrasts at least two sources
+    3. Objective Tone      – neutral, evidence-based, no fluff or opinion
+    4. Gap Identification  – specific recommendation for missing information
+    """
 
     model_id: str = "gpt-4o-mini"
 
@@ -66,41 +129,62 @@ class AnalystQualityScorer(Scorer):
         client = OpenAI()
         response = client.chat.completions.create(
             model=self.model_id,
-            temperature=0.1,
+            temperature=0.0,
             messages=[
                 {
                     "role": "system",
                     "content": (
-                        "Evaluate a research analysis. For each criterion, "
-                        "return 1 if satisfied or 0 if not.\n"
-                        "- coherence: the analysis has logical flow and clear structure\n"
-                        "- depth: the topic is covered thoroughly, not superficially\n"
-                        "- balance: different perspectives are fairly represented\n"
-                        "Return JSON: {\"coherence\": int, \"depth\": int, "
-                        "\"balance\": int, \"explanation\": str}"
+                        "You evaluate a research analysis against a 4-criterion "
+                        "binary rubric. For each criterion return exactly 1 (pass) "
+                        "or 0 (fail).\n\n"
+                        "Criteria:\n"
+                        "1. thematic_synthesis – The analysis is organized by broad "
+                        "themes or topics, NOT structured around individual "
+                        "sub-questions. The response should read as a unified "
+                        "narrative rather than a list of question-by-question "
+                        "answers.\n"
+                        "2. nuance_and_conflict – The analysis explicitly contrasts "
+                        "at least two different sources or viewpoints (e.g. "
+                        "'While Source A claims X, Source B suggests Y').\n"
+                        "3. objective_tone – The language is neutral and "
+                        "evidence-based throughout. There is no promotional "
+                        "language, personal opinion, or unsupported 'fluff'.\n"
+                        "4. gap_identification – The analysis provides at least one "
+                        "specific, logical recommendation for what information is "
+                        "missing based on the findings presented.\n\n"
+                        "Return JSON:\n"
+                        "{\n"
+                        '  "thematic_synthesis": 0 or 1,\n'
+                        '  "nuance_and_conflict": 0 or 1,\n'
+                        '  "objective_tone": 0 or 1,\n'
+                        '  "gap_identification": 0 or 1,\n'
+                        '  "explanation": "<brief reasoning for each criterion>"\n'
+                        "}"
                     ),
                 },
                 {
                     "role": "user",
-                    "content": f"Research query: {research_query}\n\nAnalysis:\n{analysis[:3000]}",
+                    "content": (
+                        f"Research query: {research_query}\n\n"
+                        f"Analysis:\n{analysis[:3000]}"
+                    ),
                 },
             ],
         )
         parsed = parse_json_response(response.choices[0].message.content)
-        coherence = int(bool(parsed.get("coherence", 0)))
-        depth = int(bool(parsed.get("depth", 0)))
-        balance = int(bool(parsed.get("balance", 0)))
+        scores = {c: int(bool(parsed.get(c, 0))) for c in _RUBRIC_CRITERIA}
+        total = sum(scores.values())
+
         return {
-            "coherence": coherence,
-            "depth": depth,
-            "balance": balance,
-            "score": coherence + depth + balance,
+            **scores,
+            "rubric_total": total,
+            "rubric_score": total / len(_RUBRIC_CRITERIA),
             "explanation": parsed.get("explanation", ""),
         }
 
 
 # ---------------------------------------------------------------------------
-# LLM / With Ground Truth
+# 3. W/ GT & LLM – Key-findings coverage
 # ---------------------------------------------------------------------------
 
 
@@ -157,8 +241,9 @@ class AnalystFindingsCoverageScorer(Scorer):
 
 def get_scorers() -> list:
     return [
-        analyst_structure_check,
-        analyst_term_overlap,
-        AnalystQualityScorer(),
-        AnalystFindingsCoverageScorer(),
+        analyst_term_overlap,            # 1. W/ GT  & Code
+        analyst_citation_density,        # 2. W/o GT & Code
+        analyst_structural_integrity,    # 2. W/o GT & Code
+        AnalystFindingsCoverageScorer(), # 3. W/ GT  & LLM
+        AnalystRubricScorer(),           # 4. W/o GT & LLM
     ]

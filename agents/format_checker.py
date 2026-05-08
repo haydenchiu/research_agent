@@ -29,6 +29,7 @@ class FormatCheckerAgent(weave.Model):
         parsed = parse_json_response(response.content)
         passed = parsed.get("passed", False)
         issues = parsed.get("issues", [])
+        summary = parsed.get("summary", "")
 
         error_issues = [
             iss["description"]
@@ -36,10 +37,16 @@ class FormatCheckerAgent(weave.Model):
             if isinstance(iss, dict) and iss.get("severity") == "error"
         ]
 
-        if passed or not error_issues:
-            return {"final_report": draft_report, "format_issues": []}
+        checker_result = {
+            "passed": passed,
+            "issues": issues,
+            "summary": summary,
+        }
 
-        return {"final_report": "", "format_issues": error_issues}
+        if passed or not error_issues:
+            return {"final_report": draft_report, "format_issues": [], "checker_result": checker_result}
+
+        return {"final_report": "", "format_issues": error_issues, "checker_result": checker_result}
 
     def node(self, state: ResearchState) -> dict:
         draft = state.get("draft_report", "")

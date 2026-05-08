@@ -4,55 +4,142 @@
     "research_query": "What are the economic impacts of AI on the labor market?",
     "search_results": [
       {
-        "query": "AI adoption in workplaces",
-        "url": "https://example.com/ai-report",
-        "title": "AI Report 2025",
-        "content": "AI adoption has grown 50% since 2020 across enterprises. Key areas include customer service automation, document processing, and predictive analytics."
+        "title": "McKinsey Global Institute: AI and the Future of Work",
+        "url": "https://www.mckinsey.com/featured-insights/future-of-work/ai-automation-and-the-future-of-work",
+        "query": "AI impact on jobs and employment",
+        "content": "By 2030, AI and automation could displace 15-30% of current work activities globally. However, new job categories in AI development, data science, and human-AI interaction design are emerging. The net effect on employment depends heavily on the pace of adoption and reskilling investment. Industries like manufacturing, transportation, and customer service face the highest displacement risk."
       },
       {
-        "query": "Jobs affected by AI automation",
-        "url": "https://example.com/jobs-ai",
-        "title": "Jobs and AI Study",
-        "content": "Routine cognitive tasks are most at risk. Administrative assistants, data entry clerks, and basic accounting roles face the highest displacement risk."
+        "title": "Brookings Institution: Automation and AI Labor Disruption",
+        "url": "https://www.brookings.edu/research/automation-and-artificial-intelligence",
+        "query": "AI automation labor market disruption",
+        "content": "Research shows that AI-driven automation disproportionately affects middle-skill, routine-based occupations, contributing to labor market polarization. Workers with lower educational attainment face higher displacement risk. Government-funded retraining programs have shown mixed results, with only 30-40% of displaced workers successfully transitioning to new roles within two years."
       },
       {
-        "query": "Counterarguments AI job displacement",
-        "url": "https://example.com/ai-jobs-counter",
-        "title": "AI Creates Jobs Too",
-        "content": "For every job displaced by AI, 1.3 new jobs are created in AI development, maintenance, and adjacent fields. The net effect may be positive."
+        "title": "World Economic Forum: Future of Jobs Report 2025",
+        "url": "https://www.weforum.org/publications/the-future-of-jobs-report-2025",
+        "query": "new jobs created by AI",
+        "content": "The WEF estimates that AI will create 97 million new roles by 2025 while displacing 85 million, yielding a net positive of 12 million jobs. Fastest-growing roles include AI/ML specialists, data analysts, digital transformation experts, and information security analysts. The skills gap remains a critical bottleneck—60% of workers will need significant reskilling."
+      },
+      {
+        "title": "OECD Employment Outlook: AI and the Labour Market",
+        "url": "https://www.oecd.org/employment/ai-labour-market.htm",
+        "query": "AI wages income inequality",
+        "content": "AI adoption correlates with a widening wage premium for high-skill workers. In OECD countries, workers in AI-complementary roles saw 8-12% wage increases from 2019-2024, while workers in AI-exposed routine occupations saw stagnant or declining real wages. Income inequality as measured by the Gini coefficient has risen in 22 of 38 OECD member states since 2020."
       }
     ],
     "target": {
-      "expected_terms": ["adoption", "automation", "displacement", "new jobs"],
+      "expected_terms": [
+        "automation",
+        "displacement",
+        "reskilling",
+        "income inequality",
+        "new job categories",
+        "wage premium",
+        "labor market polarization"
+      ],
       "key_findings": [
-        "AI adoption has accelerated significantly",
-        "Routine cognitive tasks are most affected",
-        "New job categories are emerging"
+        "AI could displace 15-30% of work activities by 2030",
+        "Middle-skill routine occupations are disproportionately affected",
+        "AI is projected to create a net positive number of new jobs",
+        "A significant skills gap and reskilling bottleneck exists",
+        "AI is widening wage inequality between high-skill and low-skill workers"
       ]
     }
   },
   {
     "id": "analyst_climate",
-    "research_query": "How effective are current carbon capture technologies?",
+    "research_query": "How effective are current carbon capture technologies in mitigating climate change?",
     "search_results": [
       {
-        "query": "carbon capture technologies",
-        "url": "https://example.com/ccs-overview",
-        "title": "CCS Technology Overview",
-        "content": "Direct air capture (DAC) can remove CO2 at $250-600 per ton. Post-combustion capture from power plants operates at $40-120 per ton."
+        "title": "Nature Reviews: Carbon Capture Technologies Assessment",
+        "url": "https://www.nature.com/articles/s41558-023-01234-5",
+        "query": "carbon capture technology effectiveness",
+        "content": "Direct Air Capture (DAC) facilities currently remove approximately 0.01 MtCO2 per year globally, far below the 5-10 GtCO2/year needed by 2050 to meet Paris Agreement targets. Point-source capture at industrial facilities achieves 85-95% capture rates but is limited to large emitters. The energy penalty for DAC remains 6-10 GJ per ton of CO2, making it one of the most energy-intensive climate solutions."
       },
       {
-        "query": "carbon capture scalability",
-        "url": "https://example.com/ccs-scale",
-        "title": "Scaling Carbon Capture",
-        "content": "Current global CCS capacity is approximately 45 million tons per year, far below the gigatons needed to meet climate goals."
+        "title": "IEA: Carbon Capture, Utilisation and Storage Report",
+        "url": "https://www.iea.org/reports/ccus-in-clean-energy-transitions",
+        "query": "carbon capture cost per ton",
+        "content": "The cost of carbon capture varies dramatically by method: point-source capture costs $40-80/tCO2, while DAC ranges from $250-600/tCO2. The IEA projects DAC costs could fall to $100-200/tCO2 by 2040 with sufficient R&D investment and scale-up. Current global CCUS capacity is approximately 45 MtCO2/year across 40 operational projects."
+      },
+      {
+        "title": "Stanford Earth: Natural vs Technological Carbon Sinks",
+        "url": "https://earth.stanford.edu/research/natural-carbon-sinks",
+        "query": "carbon capture vs natural carbon sinks forests oceans",
+        "content": "Forests and oceans currently absorb roughly 50% of anthropogenic CO2 emissions (approximately 20 GtCO2/year combined). Reforestation costs $5-50/tCO2, making it 5-100x cheaper than DAC. However, natural sinks are vulnerable to climate feedback loops—rising temperatures reduce ocean CO2 absorption capacity and increase wildfire risk for forests. A portfolio approach combining natural and technological solutions is recommended."
+      },
+      {
+        "title": "Global CCS Institute: Status Report",
+        "url": "https://www.globalccsinstitute.com/resources/global-status-report",
+        "query": "carbon capture criticism limitations",
+        "content": "Critics argue that carbon capture creates a moral hazard by reducing urgency for emissions reduction at source. Only 12% of captured CO2 is permanently stored; the majority is used for Enhanced Oil Recovery (EOR), which itself generates additional emissions. Long-term geological storage carries risks of leakage, and monitoring requirements extend for centuries. Environmental groups like Greenpeace have called CCUS a 'fossil fuel industry lifeline' that delays the renewable energy transition."
       }
     ],
     "target": {
-      "expected_terms": ["direct air capture", "cost", "scalability"],
+      "expected_terms": [
+        "direct air capture",
+        "point-source capture",
+        "cost per ton",
+        "natural sinks",
+        "moral hazard",
+        "enhanced oil recovery",
+        "Paris Agreement"
+      ],
       "key_findings": [
-        "Multiple carbon capture methods exist with varying costs",
-        "Current capacity is far below what is needed"
+        "Current DAC capacity is orders of magnitude below what is needed to meet climate targets",
+        "There is a large cost disparity between point-source capture and direct air capture",
+        "Natural carbon sinks are significantly cheaper but vulnerable to climate feedback loops",
+        "Most captured CO2 is used for enhanced oil recovery rather than permanent storage",
+        "Critics view CCUS as potentially delaying the transition to renewable energy"
+      ]
+    }
+  },
+  {
+    "id": "analyst_remote_work",
+    "research_query": "What are the long-term effects of remote work on productivity and employee wellbeing?",
+    "search_results": [
+      {
+        "title": "Stanford WFH Research: Productivity Analysis",
+        "url": "https://wfhresearch.com/research-papers/",
+        "query": "remote work productivity research",
+        "content": "A large-scale study of 16,000 workers found that fully remote workers are 10-20% less productive than in-office peers on collaborative tasks, but equally or more productive on focused individual work. Hybrid arrangements (2-3 days remote) showed no measurable productivity loss and reduced attrition by 35%. Productivity measurement varies significantly by industry—knowledge workers show the smallest remote penalty while roles requiring physical coordination show the largest."
+      },
+      {
+        "title": "Harvard Business Review: Remote Work and Mental Health",
+        "url": "https://hbr.org/2024/03/remote-work-mental-health-study",
+        "query": "remote work employee mental health wellbeing",
+        "content": "Remote workers report 25% lower commute-related stress but 40% higher rates of professional isolation and loneliness. Work-life boundary erosion is the most cited negative effect, with 62% of remote workers reporting difficulty 'switching off.' Burnout rates among fully remote workers exceeded in-office peers by 15% in 2024 surveys. However, employees with caregiving responsibilities consistently rate remote work as beneficial to their overall wellbeing."
+      },
+      {
+        "title": "MIT Sloan: Collaboration in Distributed Teams",
+        "url": "https://sloanreview.mit.edu/article/collaboration-distributed-teams",
+        "query": "remote work team collaboration communication",
+        "content": "Microsoft's analysis of 61,000 employees found that remote work reduced cross-team communication by 25% and increased siloed behavior. Asynchronous communication tools partially offset this, but spontaneous innovation-driving interactions declined significantly. Teams that adopted structured 'virtual water cooler' sessions and collaborative documentation practices maintained higher innovation metrics. The quality of management, not the work location, was the strongest predictor of team performance."
+      },
+      {
+        "title": "Gallup: State of the Global Workplace 2025",
+        "url": "https://www.gallup.com/workplace/global-workplace-2025.aspx",
+        "query": "remote work long-term risks downsides",
+        "content": "Gallup's longitudinal data shows that employee engagement peaked during the initial remote transition (2020-2021) but has since declined to pre-pandemic levels for fully remote workers. Career advancement is a growing concern: remote workers receive 31% fewer promotions than in-office peers with comparable performance. Younger workers (under 30) report the largest negative impact on mentorship and skill development opportunities. Companies with strong remote-work cultures and intentional onboarding programs mitigate these risks substantially."
+      }
+    ],
+    "target": {
+      "expected_terms": [
+        "hybrid",
+        "productivity",
+        "isolation",
+        "burnout",
+        "collaboration",
+        "promotion gap",
+        "work-life balance"
+      ],
+      "key_findings": [
+        "Hybrid arrangements show no productivity loss and reduce attrition",
+        "Remote workers experience higher isolation and work-life boundary erosion",
+        "Remote work reduces cross-team communication and spontaneous interaction",
+        "Remote workers receive significantly fewer promotions than in-office peers",
+        "Management quality is a stronger predictor of outcomes than work location"
       ]
     }
   }

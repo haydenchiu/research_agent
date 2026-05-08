@@ -42,6 +42,7 @@ class CriticAgent(weave.Model):
 
         critique = {
             "approved": parsed.get("approved", False),
+            "overall_quality": parsed.get("overall_quality", ""),
             "gaps": parsed.get("gaps", []),
             "feedback": parsed.get("feedback", ""),
             "additional_search_queries": parsed.get("additional_search_queries", []),

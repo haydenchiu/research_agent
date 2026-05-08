@@ -2,35 +2,129 @@
   {
     "id": "writer_ai_labor",
     "research_query": "What are the economic impacts of AI on the labor market?",
-    "analysis": "## Analysis: Economic Impacts of AI\n\nAI adoption has grown 50% since 2020. Routine cognitive tasks face displacement. New jobs are emerging in AI-adjacent fields. Policy responses include retraining programs.\n\n### Sources\n- [AI Report 2025](https://example.com/ai-report)\n- [Jobs and AI Study](https://example.com/jobs-ai)",
+    "analysis": "## Analysis: Economic Impacts of AI on the Labor Market\n\nAI adoption across industries has surged by 50% since 2020, driven largely by advances in generative AI and automation platforms [1]. The World Economic Forum projects that 85 million jobs may be displaced by AI by 2025, while 97 million new roles could emerge [2]. Routine cognitive tasks in accounting, data entry, and customer service face the highest displacement risk, with McKinsey estimating that 30% of hours worked globally could be automated by 2030 [3].\n\nHowever, AI is also creating entirely new job categories. Demand for AI trainers, prompt engineers, and machine learning operations specialists grew 34% year-over-year in 2024 [4]. The net effect on wages remains contested: high-skill workers see wage premiums of 15-20%, while mid-skill workers face stagnation [5].\n\nGovernments are responding with retraining initiatives. The EU's AI Act includes provisions for workforce transition funding, and the US allocated $500M to AI workforce development in 2024 [6].\n\n### Sources\n1. [Stanford HAI AI Index 2025](https://aiindex.stanford.edu/report/)\n2. [World Economic Forum Future of Jobs 2025](https://www.weforum.org/publications/the-future-of-jobs-report-2025/)\n3. [McKinsey Global Institute AI Report](https://www.mckinsey.com/featured-insights/future-of-work/)\n4. [LinkedIn Workforce Report 2024](https://economicgraph.linkedin.com/resources/linkedin-workforce-report)\n5. [Brookings Institution AI and Wages Study](https://www.brookings.edu/articles/ai-wages-study/)\n6. [EU AI Act Summary](https://artificialintelligenceact.eu/)",
     "data_analysis_result": "",
     "chart_paths": [],
     "format_issues": [],
     "target": {
-      "key_terms": ["AI", "labor market", "displacement", "automation", "new jobs"],
+      "key_terms": ["AI", "labor market", "displacement", "automation", "new jobs", "retraining"],
       "talking_points": [
         "AI adoption rate and growth trends",
         "Which job categories face highest displacement risk",
         "New job creation in AI-adjacent fields",
         "Policy recommendations for workforce transition"
-      ]
+      ],
+      "expected_citations": {
+        "1": {"url": "https://aiindex.stanford.edu/report/", "title": "Stanford HAI AI Index 2025"},
+        "2": {"url": "https://www.weforum.org/publications/the-future-of-jobs-report-2025/", "title": "World Economic Forum Future of Jobs 2025"},
+        "3": {"url": "https://www.mckinsey.com/featured-insights/future-of-work/", "title": "McKinsey Global Institute AI Report"},
+        "4": {"url": "https://economicgraph.linkedin.com/resources/linkedin-workforce-report", "title": "LinkedIn Workforce Report 2024"},
+        "5": {"url": "https://www.brookings.edu/articles/ai-wages-study/", "title": "Brookings Institution AI and Wages Study"},
+        "6": {"url": "https://artificialintelligenceact.eu/", "title": "EU AI Act Summary"}
+      },
+      "must_include_metrics": [
+        "50%",
+        "85 million",
+        "97 million",
+        "34%",
+        "30%"
+      ],
+      "expected_reference_domains": [
+        "aiindex.stanford.edu",
+        "weforum.org",
+        "mckinsey.com",
+        "linkedin.com",
+        "brookings.edu",
+        "artificialintelligenceact.eu"
+      ],
+      "gold_standard_report": "# The Economic Impacts of AI on the Labor Market\n\n## Executive Summary\n\nArtificial intelligence is fundamentally reshaping labor markets worldwide. This report examines the dual nature of AI's economic impact: while automation threatens to displace millions of routine cognitive jobs, it simultaneously creates new professional categories and demands new skills. The analysis finds that proactive workforce policy is essential to ensure the transition benefits workers broadly rather than exacerbating inequality.\n\nKey findings indicate that AI adoption has grown 50% since 2020, with projections of 85 million displaced jobs offset by 97 million new roles. However, the transition is uneven, with mid-skill workers facing the greatest wage stagnation while high-skill workers capture disproportionate gains.\n\n## Introduction\n\nThe rapid advancement of artificial intelligence technologies has sparked significant debate about their economic consequences, particularly regarding employment. As AI systems become increasingly capable of performing tasks once thought to require human cognition, understanding the full scope of labor market impacts becomes critical for policymakers, businesses, and workers alike.\n\n## Methodology\n\nThis analysis synthesizes data from leading research institutions including the Stanford HAI AI Index, the World Economic Forum's Future of Jobs Report, and McKinsey Global Institute studies. The methodology combines quantitative labor market data with qualitative policy analysis to provide a comprehensive assessment.\n\n## Findings\n\n### AI Adoption Trends\n\nAI adoption across industries has surged by 50% since 2020 [1]. This growth has been accelerated by the emergence of generative AI tools that have lowered the barrier to entry for organizations of all sizes.\n\n### Job Displacement and Creation\n\nThe World Economic Forum projects that 85 million jobs may be displaced by 2025, while 97 million new roles could emerge [2]. McKinsey estimates that 30% of hours worked globally could be automated by 2030 [3]. Routine cognitive tasks in accounting, data entry, and customer service face the highest displacement risk.\n\n### Emerging Roles\n\nDemand for AI-adjacent roles including AI trainers, prompt engineers, and MLOps specialists grew 34% year-over-year in 2024 [4]. These positions typically require a blend of technical and domain expertise.\n\n### Wage Effects\n\nThe impact on wages is uneven. High-skill workers see premiums of 15-20%, while mid-skill workers face stagnation [5]. This divergence raises concerns about widening economic inequality.\n\n## Discussion\n\nThe findings reveal a labor market in transition. While the aggregate job numbers appear positive, the distributional effects raise serious concerns. The mismatch between displaced and created roles suggests that without targeted intervention, significant portions of the workforce may be left behind. Furthermore, the geographic concentration of new AI roles in technology hubs could exacerbate regional economic disparities.\n\n## Conclusion\n\nAI's impact on the labor market is neither purely destructive nor purely beneficial. The net outcome depends heavily on the speed and quality of policy responses, particularly in workforce retraining and education reform. The EU's AI Act provisions and US investment in workforce development represent promising starts [6], but the scale of the challenge demands more comprehensive, coordinated action.\n\n## References\n\n1. [Stanford HAI AI Index 2025](https://aiindex.stanford.edu/report/)\n2. [World Economic Forum Future of Jobs 2025](https://www.weforum.org/publications/the-future-of-jobs-report-2025/)\n3. [McKinsey Global Institute AI Report](https://www.mckinsey.com/featured-insights/future-of-work/)\n4. [LinkedIn Workforce Report 2024](https://economicgraph.linkedin.com/resources/linkedin-workforce-report)\n5. [Brookings Institution AI and Wages Study](https://www.brookings.edu/articles/ai-wages-study/)\n6. [EU AI Act Summary](https://artificialintelligenceact.eu/)"
     }
   },
   {
     "id": "writer_climate",
-    "research_query": "How effective are current carbon capture technologies?",
-    "analysis": "## Analysis: Carbon Capture Technologies\n\nDAC costs $250-600/ton. Post-combustion capture costs $40-120/ton. Current capacity is 45 Mt/year, far below gigatons needed.",
+    "research_query": "How effective are current carbon capture technologies in mitigating climate change?",
+    "analysis": "## Analysis: Carbon Capture Technologies\n\nDirect air capture (DAC) currently costs $250-600 per ton of CO2 removed, making it the most expensive approach [1]. Post-combustion capture from industrial sources is more mature, costing $40-120 per ton [2]. The IEA reports current global capture capacity at approximately 45 Mt CO2/year, far below the gigatons needed to meet Paris Agreement targets [3].\n\nBioenergy with carbon capture and storage (BECCS) offers theoretical negative emissions but faces land-use constraints [4]. Ocean-based approaches, including enhanced weathering and ocean alkalinity enhancement, are in early research phases with limited field data [5].\n\nNatural carbon sinks absorb roughly 9.5 GtCO2/year but are declining as deforestation continues and ocean warming reduces absorption capacity [6]. Energy penalties for carbon capture range from 15-30% of a power plant's output, raising concerns about the overall energy economics [7].\n\n### Sources\n1. [Climeworks DAC Cost Analysis](https://climeworks.com/cost-analysis)\n2. [Global CCS Institute Status Report 2024](https://www.globalccsinstitute.com/resources/publications-reports-research/)\n3. [IEA Carbon Capture Report 2024](https://www.iea.org/reports/carbon-capture-utilisation-and-storage-2024)\n4. [Nature BECCS Feasibility Study](https://www.nature.com/articles/s41558-024-beccs)\n5. [NOAA Ocean Carbon Research](https://www.noaa.gov/ocean-carbon-research)\n6. [Global Carbon Budget 2024](https://www.globalcarbonproject.org/carbonbudget/)\n7. [MIT Energy Initiative CCS Assessment](https://energy.mit.edu/research/carbon-capture-assessment/)",
     "data_analysis_result": "",
     "chart_paths": [],
     "format_issues": [],
     "target": {
-      "key_terms": ["carbon capture", "direct air capture", "cost", "scalability"],
+      "key_terms": ["carbon capture", "direct air capture", "DAC", "post-combustion", "BECCS", "cost", "scalability", "Paris Agreement"],
       "talking_points": [
-        "Overview of carbon capture methods",
-        "Cost comparison between methods",
-        "Current vs required capacity gap",
+        "Overview of carbon capture methods and their maturity levels",
+        "Cost comparison between DAC, post-combustion, and nature-based approaches",
+        "Current vs required capacity gap for climate targets",
+        "Energy penalties and environmental side effects",
         "Future outlook and scaling challenges"
-      ]
+      ],
+      "expected_citations": {
+        "1": {"url": "https://climeworks.com/cost-analysis", "title": "Climeworks DAC Cost Analysis"},
+        "2": {"url": "https://www.globalccsinstitute.com/resources/publications-reports-research/", "title": "Global CCS Institute Status Report 2024"},
+        "3": {"url": "https://www.iea.org/reports/carbon-capture-utilisation-and-storage-2024", "title": "IEA Carbon Capture Report 2024"},
+        "4": {"url": "https://www.nature.com/articles/s41558-024-beccs", "title": "Nature BECCS Feasibility Study"},
+        "5": {"url": "https://www.noaa.gov/ocean-carbon-research", "title": "NOAA Ocean Carbon Research"},
+        "6": {"url": "https://www.globalcarbonproject.org/carbonbudget/", "title": "Global Carbon Budget 2024"},
+        "7": {"url": "https://energy.mit.edu/research/carbon-capture-assessment/", "title": "MIT Energy Initiative CCS Assessment"}
+      },
+      "must_include_metrics": [
+        "$250-600",
+        "$40-120",
+        "45 Mt",
+        "9.5 GtCO2",
+        "15-30%"
+      ],
+      "expected_reference_domains": [
+        "climeworks.com",
+        "globalccsinstitute.com",
+        "iea.org",
+        "nature.com",
+        "noaa.gov",
+        "globalcarbonproject.org",
+        "energy.mit.edu"
+      ],
+      "gold_standard_report": "# Carbon Capture Technologies: Effectiveness in Mitigating Climate Change\n\n## Executive Summary\n\nCarbon capture technologies represent a critical but currently insufficient tool in the climate mitigation arsenal. This report evaluates the major approaches -- direct air capture, post-combustion capture, bioenergy with CCS, and ocean-based methods -- against their cost, scalability, and energy requirements. Current global capacity of approximately 45 Mt CO2/year falls dramatically short of the gigatons needed to meet Paris Agreement targets. While costs are declining, significant technological and economic barriers remain.\n\nThe analysis concludes that carbon capture must be pursued as a complement to, not a substitute for, aggressive emissions reduction.\n\n## Introduction\n\nAs global temperatures continue to rise, the scientific consensus increasingly recognizes that emissions reduction alone may be insufficient to meet climate targets. Carbon capture -- the process of removing CO2 from the atmosphere or preventing its release from industrial sources -- has emerged as a potentially vital supplementary strategy. This report examines the current state, effectiveness, and limitations of major carbon capture technologies.\n\n## Methodology\n\nThis analysis draws on data from the IEA, Global CCS Institute, and peer-reviewed research published in Nature and other journals. Cost figures are normalized to USD per ton of CO2 captured, and capacity figures are presented in megatons (Mt) or gigatons (Gt) of CO2 per year.\n\n## Findings\n\n### Direct Air Capture (DAC)\n\nDAC technology extracts CO2 directly from ambient air. Current costs range from $250-600 per ton of CO2 [1], making it the most expensive capture approach. However, costs have declined approximately 50% over the past five years, and companies like Climeworks project further reductions through scale.\n\n### Post-Combustion Capture\n\nCapturing CO2 from industrial flue gases is more mature and cost-effective, at $40-120 per ton [2]. This approach is best suited for high-concentration point sources such as cement plants, steel mills, and power stations.\n\n### Current Capacity Gap\n\nThe IEA reports global capture capacity at approximately 45 Mt CO2/year [3], while climate models suggest we need to capture 5-10 Gt/year by 2050 to stay within 1.5C warming. This represents a roughly 100-fold scale-up requirement.\n\n### Bioenergy with CCS (BECCS)\n\nBECCS combines biomass energy with carbon storage, theoretically achieving negative emissions. However, the land area required for biomass production at scale creates significant competition with food production and biodiversity [4].\n\n### Natural Sinks Comparison\n\nNatural carbon sinks absorb roughly 9.5 GtCO2/year [6], but their capacity is declining due to deforestation and ocean warming. Engineered solutions must eventually compensate for this loss.\n\n### Energy Penalties\n\nCarbon capture imposes energy penalties of 15-30% on power plant output [7], meaning that CCS-equipped facilities require significantly more fuel to produce the same electricity, potentially increasing other environmental impacts.\n\n## Discussion\n\nThe findings paint a complex picture. While carbon capture technologies are advancing rapidly, they face fundamental economic and physical constraints that limit their near-term impact. The 100-fold capacity gap between current deployment and climate targets suggests that carbon capture cannot be relied upon as a primary mitigation strategy. Furthermore, energy penalties raise the troubling possibility that capture-equipped fossil fuel plants may actually increase total resource consumption.\n\nHowever, for hard-to-abate industrial sectors like cement and steel, carbon capture may represent the only viable decarbonization pathway. The key challenge is allocating investment efficiently between proven approaches and emerging technologies.\n\n## Conclusion\n\nCarbon capture technologies are necessary but not sufficient for climate mitigation. Current costs, capacity, and energy requirements all indicate that aggressive emissions reduction must remain the primary strategy. Investment in carbon capture should prioritize industrial point-source applications where alternatives are limited, while continued R&D in DAC and ocean-based approaches builds optionality for the future.\n\n## References\n\n1. [Climeworks DAC Cost Analysis](https://climeworks.com/cost-analysis)\n2. [Global CCS Institute Status Report 2024](https://www.globalccsinstitute.com/resources/publications-reports-research/)\n3. [IEA Carbon Capture Report 2024](https://www.iea.org/reports/carbon-capture-utilisation-and-storage-2024)\n4. [Nature BECCS Feasibility Study](https://www.nature.com/articles/s41558-024-beccs)\n5. [NOAA Ocean Carbon Research](https://www.noaa.gov/ocean-carbon-research)\n6. [Global Carbon Budget 2024](https://www.globalcarbonproject.org/carbonbudget/)\n7. [MIT Energy Initiative CCS Assessment](https://energy.mit.edu/research/carbon-capture-assessment/)"
+    }
+  },
+  {
+    "id": "writer_remote_work",
+    "research_query": "What are the long-term effects of remote work on productivity and employee wellbeing?",
+    "analysis": "## Analysis: Remote Work Effects on Productivity and Wellbeing\n\nStanford research found that remote workers are 13% more productive than office counterparts for individual tasks, though collaborative productivity declined by 20% in fully remote settings [1]. Microsoft's Work Trend Index reports that 87% of employees consider themselves productive when working remotely, while only 12% of managers fully agree [2].\n\nMental health impacts are mixed. A WHO study found that remote workers report 25% less commute-related stress but 40% higher rates of feelings of isolation [3]. Burnout rates increased 15% among remote workers due to difficulty setting boundaries [4].\n\nHybrid models show the most promising outcomes. Gallup data indicates that employees working 2-3 days remotely report the highest engagement scores, 35% above fully remote and 20% above fully in-office peers [5]. Companies adopting structured hybrid policies saw 18% lower turnover rates [6].\n\n### Sources\n1. [Stanford Remote Work Study](https://siepr.stanford.edu/publications/remote-work-study)\n2. [Microsoft Work Trend Index 2024](https://www.microsoft.com/en-us/worklab/work-trend-index/)\n3. [WHO Remote Work Mental Health Report](https://www.who.int/publications/remote-work-mental-health)\n4. [Harvard Business Review Burnout Analysis](https://hbr.org/2024/remote-work-burnout)\n5. [Gallup State of the Workplace 2024](https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx)\n6. [SHRM Hybrid Work Retention Study](https://www.shrm.org/topics-tools/news/hybrid-work-retention)",
+    "data_analysis_result": "",
+    "chart_paths": [],
+    "format_issues": [],
+    "target": {
+      "key_terms": ["remote work", "productivity", "wellbeing", "hybrid", "burnout", "engagement", "isolation"],
+      "talking_points": [
+        "Individual productivity gains vs collaborative productivity losses",
+        "Mental health impacts including isolation and burnout",
+        "Hybrid model as optimal compromise",
+        "Manager vs employee perception gap on productivity",
+        "Employee retention effects"
+      ],
+      "expected_citations": {
+        "1": {"url": "https://siepr.stanford.edu/publications/remote-work-study", "title": "Stanford Remote Work Study"},
+        "2": {"url": "https://www.microsoft.com/en-us/worklab/work-trend-index/", "title": "Microsoft Work Trend Index 2024"},
+        "3": {"url": "https://www.who.int/publications/remote-work-mental-health", "title": "WHO Remote Work Mental Health Report"},
+        "4": {"url": "https://hbr.org/2024/remote-work-burnout", "title": "Harvard Business Review Burnout Analysis"},
+        "5": {"url": "https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx", "title": "Gallup State of the Workplace 2024"},
+        "6": {"url": "https://www.shrm.org/topics-tools/news/hybrid-work-retention", "title": "SHRM Hybrid Work Retention Study"}
+      },
+      "must_include_metrics": [
+        "13%",
+        "20%",
+        "87%",
+        "25%",
+        "40%",
+        "35%"
+      ],
+      "expected_reference_domains": [
+        "siepr.stanford.edu",
+        "microsoft.com",
+        "who.int",
+        "hbr.org",
+        "gallup.com",
+        "shrm.org"
+      ],
+      "gold_standard_report": "# Long-Term Effects of Remote Work on Productivity and Employee Wellbeing\n\n## Executive Summary\n\nThe shift to remote work has produced nuanced effects on both productivity and employee wellbeing. This report synthesizes research from Stanford, Microsoft, WHO, and Gallup to assess the long-term implications. Individual task productivity shows measurable gains of 13%, but collaborative productivity declines by 20% in fully remote settings. Mental health impacts are bifurcated: reduced commute stress (25%) is offset by increased isolation (40%) and burnout (15%). Hybrid models working 2-3 days remotely emerge as the optimal configuration, delivering the highest engagement and retention outcomes.\n\n## Introduction\n\nThe COVID-19 pandemic catalyzed a global experiment in remote work that continues to shape employment practices. As organizations make permanent decisions about work arrangements, understanding the long-term effects on productivity and employee wellbeing is essential for evidence-based policy.\n\n## Methodology\n\nThis analysis synthesizes longitudinal studies and large-scale workforce surveys from leading research institutions. Productivity metrics include both individual output measures and collaborative effectiveness indicators. Wellbeing is assessed across mental health, engagement, and retention dimensions.\n\n## Findings\n\n### Individual vs Collaborative Productivity\n\nStanford research demonstrates that remote workers achieve 13% higher productivity on individual tasks [1]. However, fully remote settings show a 20% decline in collaborative productivity, attributed to reduced spontaneous interaction and communication friction.\n\n### The Perception Gap\n\nMicrosoft's Work Trend Index reveals a striking disconnect: 87% of employees report being productive remotely, while only 12% of managers agree [2]. This perception gap drives ongoing tension in return-to-office decisions.\n\n### Mental Health and Wellbeing\n\nThe WHO reports 25% less commute-related stress among remote workers but 40% higher rates of isolation [3]. Harvard Business Review analysis finds burnout rates increased 15% due to difficulty maintaining work-life boundaries [4].\n\n### The Hybrid Advantage\n\nGallup data shows that employees working 2-3 days remotely achieve engagement scores 35% above fully remote peers and 20% above fully in-office colleagues [5]. Companies with structured hybrid policies report 18% lower turnover [6].\n\n## Discussion\n\nThe evidence strongly suggests that the future of work is neither fully remote nor fully in-office, but a structured hybrid. The productivity data reveals that remote work's benefits are task-dependent: focused individual work thrives remotely, while innovation and collaboration require in-person interaction. The mental health findings underscore the importance of social connection in the workplace. Organizations that recognize this nuance and design intentional hybrid policies will likely outperform those taking an all-or-nothing approach.\n\n## Conclusion\n\nRemote work offers genuine productivity and wellbeing benefits when properly structured, but unchecked fully remote arrangements risk isolation, burnout, and collaborative decline. The optimal approach appears to be structured hybrid models with clear expectations for in-person and remote days.\n\n## References\n\n1. [Stanford Remote Work Study](https://siepr.stanford.edu/publications/remote-work-study)\n2. [Microsoft Work Trend Index 2024](https://www.microsoft.com/en-us/worklab/work-trend-index/)\n3. [WHO Remote Work Mental Health Report](https://www.who.int/publications/remote-work-mental-health)\n4. [Harvard Business Review Burnout Analysis](https://hbr.org/2024/remote-work-burnout)\n5. [Gallup State of the Workplace 2024](https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx)\n6. [SHRM Hybrid Work Retention Study](https://www.shrm.org/topics-tools/news/hybrid-work-retention)"
     }
   }
 ]

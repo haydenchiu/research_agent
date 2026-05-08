@@ -1,22 +1,62 @@
 [
   {
-    "id": "critic_good_analysis",
+    "id": "critic_strong_analysis",
     "research_query": "What are the economic impacts of AI on the labor market?",
-    "analysis": "## Analysis: Economic Impacts of AI on the Labor Market\n\nAI adoption has accelerated significantly since 2020, with roughly 50% growth in enterprise deployments.\n\n### Key Themes\n- Automation is concentrated in routine cognitive tasks like data entry and basic accounting.\n- Administrative and clerical roles face the highest displacement risk.\n- New job categories are emerging: AI trainers, prompt engineers, and ethics specialists.\n- For every job displaced, approximately 1.3 new positions are created.\n- Policy responses vary globally, with some nations investing in retraining programs.\n\n### Sources\n- [AI Report 2025](https://example.com/ai-report)\n- [Jobs and AI Study](https://example.com/jobs-ai)",
+    "analysis": "## Analysis: Economic Impacts of AI on the Labor Market\n\nAI adoption has accelerated significantly since 2020, with roughly 50% growth in enterprise deployments according to [McKinsey Global Survey](https://mckinsey.com/ai-report). This section synthesizes evidence from multiple sources on how AI is reshaping labor markets.\n\n### Job Displacement and Transformation\nAutomation is concentrated in routine cognitive tasks like data entry and basic accounting. Administrative and clerical roles face the highest displacement risk, with estimates of 30-40% task automation potential by 2030 ([OECD Employment Outlook](https://oecd.org/employment)). However, while [Goldman Sachs Research](https://gs.com/ai-labor) estimates 300 million jobs exposed globally, [MIT Sloan Study](https://mitsloan.edu/ai-jobs) argues that most roles will be augmented rather than eliminated.\n\n### Job Creation\nNew job categories are emerging: AI trainers, prompt engineers, ethics specialists, and data curators. For every job displaced, approximately 1.3 new positions are created according to [World Economic Forum Future of Jobs Report](https://wef.org/jobs). The net employment effect remains contested in the literature.\n\n### Wage and Inequality Effects\nAI adoption correlates with wage polarization. High-skill workers see 5-15% wage premiums, while mid-skill workers face wage stagnation ([Brookings Institution](https://brookings.edu/ai-wages)). The Gini coefficient in AI-heavy sectors has increased 2-3 points since 2020.\n\n### Policy Responses\nPolicy responses vary globally. The EU has invested EUR 1.2 billion in retraining programs, while the US relies primarily on private-sector initiatives. Nordic countries show the most comprehensive social safety net adaptations.\n\n### Gaps in Evidence\nLong-term longitudinal data remains scarce—most studies cover 2-5 year periods. The impact on informal economies in developing nations is severely under-studied.\n\n### Consensus and Disagreement\nThere is broad consensus that AI will transform rather than eliminate most jobs. Disagreement centers on the pace of change and whether policy can adapt quickly enough to prevent transitional unemployment spikes.",
     "revision_count": 0,
     "max_revisions": 3,
     "target": {
-      "expected_approved": true
+      "expected_approved": true,
+      "expected_overall_quality": "excellent",
+      "expert_critique": "This analysis is comprehensive and well-structured. It covers displacement, creation, wage effects, and policy responses with specific data points and citations. The analysis contrasts multiple sources (Goldman Sachs vs MIT Sloan), includes a gaps section acknowledging limitations in longitudinal data, and addresses consensus vs disagreement. Minor improvement: could quantify policy effectiveness more specifically."
     }
   },
   {
     "id": "critic_weak_analysis",
     "research_query": "What are the economic impacts of AI on the labor market?",
-    "analysis": "AI is changing jobs. Some people lose jobs and some get new ones. It is a big topic.",
+    "analysis": "AI is changing jobs. Some people lose jobs and some get new ones. It is a big topic. Companies are using AI more now. The government should do something about it. AI is good for the economy overall.",
     "revision_count": 0,
     "max_revisions": 3,
     "target": {
-      "expected_approved": false
+      "expected_approved": false,
+      "expected_overall_quality": "poor",
+      "expert_critique": "This analysis is severely lacking. Critical weaknesses: (1) No citations or evidence supporting any claims. (2) Extremely vague—no specific data, statistics, or named sources. (3) One-sided conclusion ('AI is good for the economy overall') without addressing counterarguments or risks. (4) No structural organization—missing sections on displacement specifics, wage effects, policy responses. (5) Fails to address the complexity of the topic, presenting it as a simple positive narrative. (6) No discussion of gaps in evidence or areas of scholarly disagreement."
+    }
+  },
+  {
+    "id": "critic_mediocre_analysis",
+    "research_query": "How effective are current carbon capture technologies in mitigating climate change?",
+    "analysis": "## Carbon Capture Technologies\n\nCarbon capture and storage (CCS) is a set of technologies designed to capture CO2 emissions from industrial sources and store them underground.\n\n### Types of CCS\nThere are three main types: post-combustion capture, pre-combustion capture, and direct air capture (DAC). Post-combustion is the most mature, used in several power plants globally.\n\n### Effectiveness\nCCS can capture up to 90% of CO2 from a point source. However, the global capacity is still very small—only about 40 million tons per year, compared to 37 billion tons of annual emissions. DAC is even smaller in scale.\n\n### Costs\nCosts vary widely. Post-combustion capture costs $50-100 per ton, while DAC costs $250-600 per ton. These costs need to drop significantly for widespread deployment.\n\n### Conclusion\nCarbon capture has potential but is not yet a silver bullet for climate change. More investment and policy support are needed.",
+    "revision_count": 1,
+    "max_revisions": 3,
+    "target": {
+      "expected_approved": false,
+      "expected_overall_quality": "fair",
+      "expert_critique": "The analysis covers basic ground on CCS types and costs but has significant gaps: (1) No comparison to natural carbon sinks (forests, oceans). (2) No discussion of energy requirements for capture processes—a critical oversight since some methods consume substantial energy. (3) No mention of specific projects or real-world deployments. (4) Missing discussion of environmental side effects (e.g., leakage risks, water usage). (5) The conclusion is generic and lacks actionable specificity. (6) Sources are not cited. The analysis reads as a surface-level overview rather than a rigorous research synthesis."
+    }
+  },
+  {
+    "id": "critic_biased_analysis",
+    "research_query": "What are the health effects of social media usage on adolescents?",
+    "analysis": "## Social Media and Adolescent Health\n\nSocial media is incredibly harmful to teenagers and should be heavily regulated or banned for minors.\n\n### Mental Health Crisis\nStudies overwhelmingly show that social media causes depression, anxiety, and low self-esteem in teens. Instagram is particularly toxic, as Facebook's own internal research revealed. Screen time is directly correlated with poor mental health outcomes.\n\n### Cyberbullying\nCyberbullying through social media platforms has reached epidemic proportions, driving some teens to self-harm and suicide. Platforms have failed to adequately address this crisis.\n\n### Addiction\nSocial media companies deliberately design addictive features using variable reward mechanisms similar to slot machines. Teens' developing brains are especially vulnerable to these manipulative designs.\n\n### Sources\n- Various news articles and studies",
+    "revision_count": 0,
+    "max_revisions": 3,
+    "target": {
+      "expected_approved": false,
+      "expected_overall_quality": "poor",
+      "expert_critique": "This analysis demonstrates significant bias and lacks scholarly rigor: (1) Presents only one perspective—entirely negative—without acknowledging research showing positive effects of social media (e.g., community building, identity exploration, access to health information). (2) Uses emotionally charged language ('incredibly harmful', 'toxic', 'epidemic', 'crisis') inappropriate for objective research. (3) Conflates correlation with causation ('social media causes depression')—the causal relationship is still debated. (4) Cites no specific studies by name, only vague references. (5) Makes policy prescriptions ('should be banned') rather than synthesizing evidence. (6) No discussion of methodological limitations in existing research. (7) Missing nuance about different types of social media use (passive vs active)."
+    }
+  },
+  {
+    "id": "critic_good_but_incomplete",
+    "research_query": "What are the long-term effects of remote work on productivity and employee wellbeing?",
+    "analysis": "## Remote Work: Productivity and Wellbeing\n\n### Productivity Findings\nA [Stanford study by Bloom et al. (2015)](https://stanford.edu/bloom-remote) found a 13% performance increase among remote call center workers. More recent data from [Microsoft's Work Trend Index 2024](https://microsoft.com/worktrend) shows that 87% of employees report being productive when working remotely, though managers are less convinced—only 12% have full confidence in their team's productivity.\n\n### Wellbeing Impacts\nRemote workers report higher job satisfaction ([Buffer State of Remote Work 2024](https://buffer.com/remote-work)) but also increased feelings of isolation and difficulty disconnecting. Burnout rates are comparable to in-office workers but manifest differently—remote workers tend toward exhaustion rather than cynicism.\n\n### Collaboration Effects\nA [Nature study (2022)](https://nature.com/remote-collab) found that remote work made collaboration networks more siloed and static, potentially reducing innovation. Synchronous communication dropped 25% in favor of asynchronous messaging.\n\n### Conclusion\nRemote work offers productivity benefits for focused individual tasks but may impair collaborative innovation. The wellbeing picture is mixed, with gains in autonomy offset by isolation risks.",
+    "revision_count": 0,
+    "max_revisions": 3,
+    "target": {
+      "expected_approved": false,
+      "expected_overall_quality": "good",
+      "expert_critique": "Solid analysis with good citations and balanced presentation of evidence. However, key gaps remain: (1) No discussion of how remote work effects vary by industry and role type—the Stanford study focused on call center workers, which may not generalize. (2) Missing management practices and tools that support remote effectiveness. (3) No discussion of economic implications (cost savings, real estate, geographic wage arbitrage). (4) The wellbeing section could explore socioeconomic disparities—remote work benefits vary significantly by housing situation, caregiving responsibilities, and income level. (5) No mention of hybrid models as a middle ground."
     }
   }
 ]

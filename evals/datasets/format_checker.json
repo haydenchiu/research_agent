@@ -1,16 +1,123 @@
 [
   {
-    "id": "format_checker_good_report",
-    "draft_report": "# Economic Impacts of AI on the Labor Market\n\n## Executive Summary\n\nThis report examines the economic impacts of artificial intelligence on employment.\n\n## Introduction\n\nArtificial intelligence is transforming the global economy.\n\n## Methodology\n\nInformation was gathered through systematic web search and synthesis.\n\n## Findings\n\nAI adoption has grown 50% since 2020, primarily in routine cognitive tasks.\n\n## Discussion\n\nThe evidence suggests a mixed picture with both displacement and creation effects.\n\n## Conclusion\n\nAI's impact on labor markets is significant but nuanced.\n\n## References\n\n1. [AI Report 2025](https://example.com/ai-report)",
+    "id": "fc_sabotaged_report",
+    "draft_report": "# The Impact of AI on Healthcare\n\n## Executive Summary\n\nAI is transforming healthcare through improved diagnostics and treatment planning [1]. TODO: Add more detail here.\n\n## Introduction\n\nHealthcare spending accounts for a significant portion of GDP in most developed nations. The integration of artificial intelligence into clinical workflows has accelerated dramatically over the past decade [2].\n\n#### Historical Context\n\nEarly AI systems began appearing in medical settings in the 1990s, primarily for rule-based expert systems [3].\n\n## Findings\n\n### Diagnostic Accuracy\n\nAI models have shown promising results in radiology, with recent meta-analyses reporting sensitivity rates above 90% for certain conditions [1]. A landmark study demonstrated that AI-assisted diagnosis reduced false negatives by 11.5% [4].\n\n![Diagnostic Results](charts/nonexistent_chart.png)\n\n### Treatment Planning\n\nAI-assisted treatment plans have reduced planning time by 30-40% in radiation oncology [2]. These systems leverage patient data and clinical guidelines to generate optimized protocols.\n\n## Discussion\n\nThe findings suggest that AI has significant potential to improve both diagnostic accuracy and treatment efficiency [1][2]. However, challenges remain in areas such as data privacy, algorithmic bias, and regulatory frameworks.\n\n## Conclusion\n\nAI in healthcare shows promising results across diagnostics and treatment planning. Continued research and responsible deployment are essential to realizing its full potential.\n\n## References\n\n1. [Smith et al., 2024](https://example.com/smith2024)\n2. [Johnson et al., 2023](https://example.com/johnson2023)\n3. [Williams et al., 2022](https://example.com/williams2022)",
     "target": {
-      "expected_passed": true
+      "expected_passed": false,
+      "planted_errors": [
+        {
+          "type": "missing_section",
+          "detail": "Methodology section is missing"
+        },
+        {
+          "type": "dangling_citation",
+          "detail": "Citation [4] is used in text but has no matching entry in References"
+        },
+        {
+          "type": "invalid_image_path",
+          "detail": "Image path charts/nonexistent_chart.png does not exist"
+        },
+        {
+          "type": "placeholder_text",
+          "detail": "TODO placeholder in Executive Summary"
+        },
+        {
+          "type": "heading_hierarchy_skip",
+          "detail": "Heading jumps from h2 (Introduction) to h4 (Historical Context), skipping h3"
+        }
+      ],
+      "expected_citation_mismatches": {
+        "cited_but_not_in_references": [4],
+        "in_references_but_not_cited": []
+      },
+      "invalid_image_paths": ["charts/nonexistent_chart.png"],
+      "valid_image_paths": [],
+      "expert_issues": [
+        {
+          "severity": "error",
+          "section": "Report Structure",
+          "description": "Missing required Methodology section"
+        },
+        {
+          "severity": "error",
+          "section": "References",
+          "description": "Citation [4] used in Findings but has no corresponding entry in References"
+        },
+        {
+          "severity": "error",
+          "section": "Findings",
+          "description": "Image path charts/nonexistent_chart.png is invalid"
+        },
+        {
+          "severity": "error",
+          "section": "Executive Summary",
+          "description": "Contains placeholder text: TODO"
+        },
+        {
+          "severity": "warning",
+          "section": "Introduction",
+          "description": "Heading hierarchy skips from h2 to h4"
+        }
+      ]
     }
   },
   {
-    "id": "format_checker_bad_report",
-    "draft_report": "AI is changing jobs.\n\nSome people lose jobs. Others get new ones.\n\nThe end.",
+    "id": "fc_citation_mismatch",
+    "draft_report": "# Carbon Capture Technology Assessment\n\n## Executive Summary\n\nThis report examines the current state and effectiveness of carbon capture and storage (CCS) technologies. Key findings indicate that while direct air capture (DAC) costs have decreased, they remain significantly higher than point-source capture methods [1].\n\n## Introduction\n\nClimate change mitigation requires a portfolio of approaches, including emission reduction, renewable energy adoption, and carbon removal [2]. Carbon capture technologies have emerged as a critical component of net-zero strategies.\n\n## Methodology\n\nThis report synthesizes peer-reviewed literature, government reports, and industry data from 2020-2025. Sources were evaluated for methodological rigor and relevance to current technology readiness levels.\n\n## Findings\n\n### Cost Analysis\n\nPoint-source capture costs range from $40-80 per ton of CO2 [1], while DAC currently costs $250-600 per ton [3]. Industry projections suggest DAC costs could fall below $200 per ton by 2030.\n\n### Capacity and Scale\n\nGlobal CCS capacity reached 45 million tons per year in 2024 [2]. [Insert Chart Here] The largest operational facility captures approximately 4 million tons annually.\n\n### Environmental Trade-offs\n\nCCS operations require significant energy inputs, with current systems consuming 25-40% of a power plant's output [1].\n\n## Discussion\n\nThe data reveals a tension between technological promise and economic reality. While capture efficiency has improved markedly, the energy penalty remains a fundamental constraint [2][3]. Policy incentives such as the 45Q tax credit have proven effective in stimulating investment.\n\n## Conclusion\n\nCarbon capture technologies are maturing but face significant economic and scaling challenges. A combination of policy support, continued R&D, and market mechanisms will be essential for CCS to contribute meaningfully to climate goals.\n\n## References\n\n1. [Global CCS Institute, 2024](https://example.com/gccs2024)\n2. [IEA World Energy Outlook, 2024](https://example.com/iea2024)\n3. [National Academies, 2023](https://example.com/nas2023)\n4. [DOE Carbon Capture Program, 2024](https://example.com/doe2024)\n5. [MIT Energy Initiative, 2023](https://example.com/mit2023)",
     "target": {
-      "expected_passed": false
+      "expected_passed": false,
+      "planted_errors": [
+        {
+          "type": "orphan_reference",
+          "detail": "Reference [4] exists in list but is never cited in the text"
+        },
+        {
+          "type": "orphan_reference",
+          "detail": "Reference [5] exists in list but is never cited in the text"
+        },
+        {
+          "type": "placeholder_text",
+          "detail": "[Insert Chart Here] placeholder in Findings"
+        }
+      ],
+      "expected_citation_mismatches": {
+        "cited_but_not_in_references": [],
+        "in_references_but_not_cited": [4, 5]
+      },
+      "invalid_image_paths": [],
+      "valid_image_paths": [],
+      "expert_issues": [
+        {
+          "severity": "warning",
+          "section": "References",
+          "description": "Reference [4] (DOE Carbon Capture Program) is listed but never cited in text"
+        },
+        {
+          "severity": "warning",
+          "section": "References",
+          "description": "Reference [5] (MIT Energy Initiative) is listed but never cited in text"
+        },
+        {
+          "severity": "error",
+          "section": "Findings",
+          "description": "Contains placeholder text: [Insert Chart Here]"
+        }
+      ]
+    }
+  },
+  {
+    "id": "fc_clean_report",
+    "draft_report": "# Remote Work and Organizational Productivity\n\n## Executive Summary\n\nThis report analyzes the impact of remote work on organizational productivity and employee wellbeing. Evidence suggests that hybrid models (2-3 days remote per week) optimize both productivity and satisfaction, while fully remote arrangements show mixed results depending on role type and management practices [1][2].\n\n## Introduction\n\nThe COVID-19 pandemic accelerated the adoption of remote work across industries, creating a natural experiment in workplace flexibility [1]. As organizations now make long-term decisions about work arrangements, understanding the productivity implications is critical [3].\n\n## Methodology\n\nThis analysis draws on 47 peer-reviewed studies, 12 industry surveys, and 3 government labor reports published between 2021 and 2025. Studies were filtered for sample sizes exceeding 500 participants and peer-reviewed methodology.\n\n## Findings\n\n### Individual Productivity\n\nRemote workers report 13% higher productivity on focused, individual tasks [1]. However, collaborative tasks show a 5-8% decline in output quality when performed remotely [2].\n\n### Team Dynamics\n\nTeams with established relationships prior to going remote maintained higher performance levels than newly formed remote teams [3]. Communication frequency decreased by 25% in fully remote settings [2].\n\n### Employee Wellbeing\n\nRemote workers reported 20% higher job satisfaction scores [1] but also a 15% increase in feelings of professional isolation [3]. Work-life boundary erosion was cited as a concern by 40% of respondents.\n\n## Discussion\n\nThe evidence presents a nuanced picture. The productivity gains from remote work are real but context-dependent, varying significantly by task type, team tenure, and organizational support structures [1][2][3]. Organizations that invested in digital collaboration tools and manager training saw smaller declines in collaborative output. The wellbeing data suggests that the benefits of flexibility must be balanced against the risks of isolation.\n\n## Conclusion\n\nRemote work delivers measurable productivity benefits for individual-focused roles, while hybrid models best balance collaboration needs with flexibility preferences. Organizations should invest in intentional collaboration design and manager training to optimize remote work outcomes.\n\n## References\n\n1. [Bloom et al., 2024](https://example.com/bloom2024)\n2. [Microsoft Work Trends, 2024](https://example.com/mswork2024)\n3. [Gallup State of the Workplace, 2025](https://example.com/gallup2025)",
+    "target": {
+      "expected_passed": true,
+      "planted_errors": [],
+      "expected_citation_mismatches": {
+        "cited_but_not_in_references": [],
+        "in_references_but_not_cited": []
+      },
+      "invalid_image_paths": [],
+      "valid_image_paths": [],
+      "expert_issues": []
     }
   }
 ]
