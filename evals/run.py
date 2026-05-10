@@ -22,6 +22,8 @@ from dotenv import load_dotenv
 
 EVALS_DIR = Path(__file__).resolve().parent
 DATASETS_DIR = EVALS_DIR / "datasets"
+# Running `python evals/run.py` puts `evals/` on sys.path[0]; top-level `agents/` lives at repo root.
+sys.path.insert(0, str(EVALS_DIR.parent))
 
 AGENT_REGISTRY = {
     "planner": {
