@@ -53,7 +53,7 @@ Options:
 
 ## Evaluation
 
-Each agent has a suite of scorers organized in a 2x2 matrix: with/without ground truth crossed with code-based/LLM-judged. Evaluations are powered by `weave.Evaluation` and results are tracked on W&B.
+Each agent has a suite of scorers organized in a 2x2 matrix: with/without ground truth crossed with code-based/LLM-judged. Standard runs use `weave.Evaluation` and results are tracked on W&B.
 
 ```bash
 # Run evals for a single agent (requires a dataset in evals/datasets/)
@@ -65,7 +65,9 @@ python -m evals.run --all
 
 ### Building datasets from W&B traces
 
-Traces from agent runs are stored on Weave automatically. You can pull them into eval datasets and run ground-truth-free scorers (structural checks + LLM rubrics) without any manual labeling.
+Traces from agent runs are stored on Weave automatically. You can pull them into JSON datasets under `evals/datasets/` (gitignored). Hand-curated datasets use `<agent>.json`; trace-derived datasets use `<agent>_traces.json`.
+
+Each trace row includes the **inputs** to that agent’s `predict` call plus **`predict_output`**: the cached return value from Weave (so you can re-score without re-running the agent).
 
 ```bash
 # Build datasets from Weave traces (gated on a minimum run count)
@@ -73,12 +75,26 @@ python -m evals.build_dataset --all --min-runs 5
 
 # Only include traces after a specific date
 python -m evals.build_dataset --all --since 2025-06-01
-
-# Run GT-free evals on trace-derived datasets
-python -m evals.run --all --gt-free
 ```
 
-Dataset files are written to `evals/datasets/` (gitignored). Hand-curated datasets use `<agent>.json`; trace-derived datasets use `<agent>_traces.json`.
+### Ground-truth-free evals (two modes)
+
+**Re-run the model on each row** (calls `weave.Evaluation.evaluate`; useful when you want fresh predictions or have no cached outputs):
+
+```bash
+python -m evals.run --all --gt-free
+python -m evals.run --agent planner --gt-free   # prefers *_traces.json when present
+```
+
+**Re-score cached trace outputs only** (no `predict`; uses `weave.EvaluationLogger` so GT-free scorers run against stored `predict_output`). Cheaper when traces already exist and you are iterating on scorers or rubrics:
+
+```bash
+python -m evals.batch_trace_eval --agent planner
+python -m evals.batch_trace_eval --all
+# Optional: --dataset path/to.json --project research-agent --eval-name my-run
+```
+
+Rows must include `predict_output`. Rebuild trace datasets with `evals.build_dataset` after workflow changes so that field is present. Scorers may still call LLMs or embeddings; only agent inference is skipped.
 
 ## Project Structure
 
@@ -94,8 +110,10 @@ tools/
   pdf_export.py          # Markdown-to-PDF via fpdf2
 config/settings.py       # Paths, API key helpers
 evals/
-  run.py                 # Weave evaluation runner (--gt-free support)
-  build_dataset.py       # Build eval datasets from W&B/Weave traces
+  run.py                 # Weave Evaluation runner (--gt-free re-invokes predict)
+  batch_trace_eval.py    # GT-free eval on cached trace outputs (EvaluationLogger)
+  build_dataset.py       # Trace rows: inputs + predict_output from Weave
+  trace_payload.py       # Shared field name for cached predict JSON
   scorers/               # Per-agent scorer modules
 tests/
   test_workflow_dry_run.py
