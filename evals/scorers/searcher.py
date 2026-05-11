@@ -306,6 +306,15 @@ _RUBRIC_CRITERIA = [
 ]
 
 
+def _research_query_for_judge(research_query: str | None, sub_questions: list[str]) -> str:
+    """Use explicit trace query when present; otherwise a compact synthetic line for the judge."""
+    if research_query and str(research_query).strip():
+        return str(research_query).strip()
+    if sub_questions:
+        return "Synthetic overview (no research_query in trace): " + "; ".join(sub_questions[:4])
+    return "(no research query or sub-questions)"
+
+
 class SearcherRubricScorer(Scorer):
     """LLM judge: 4-point binary rubric evaluated without ground truth.
 
@@ -321,10 +330,16 @@ class SearcherRubricScorer(Scorer):
     model_id: str = "gpt-4o-mini"
 
     @weave.op()
-    def score(self, output: dict, sub_questions: list[str], research_query: str) -> dict:
+    def score(
+        self,
+        output: dict,
+        sub_questions: list[str],
+        research_query: str | None = None,
+    ) -> dict:
         findings = output.get("findings", [])
         findings_text = _format_findings_for_judge(findings)
         questions_text = "\n".join(f"- {q}" for q in sub_questions)
+        query_for_judge = _research_query_for_judge(research_query, sub_questions)
 
         client = OpenAI()
         response = client.chat.completions.create(
@@ -372,7 +387,7 @@ class SearcherRubricScorer(Scorer):
                 {
                     "role": "user",
                     "content": (
-                        f"Research query: {research_query}\n\n"
+                        f"Research query: {query_for_judge}\n\n"
                         f"Sub-questions given to agent:\n{questions_text}\n\n"
                         f"Agent findings output:\n{findings_text}"
                     ),

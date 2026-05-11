@@ -15,11 +15,11 @@ class AnalystAgent(weave.Model):
     max_tokens: int = 4096
 
     @weave.op()
-    def predict(self, research_query: str, search_results: list[dict]) -> dict:
+    def predict(self, research_query: str, search_results: list[dict] | None = None) -> dict:
         llm = build_llm(self.provider, self.model_name, self.temperature, self.max_tokens)
         system_prompt = load_prompt("analyst")
 
-        results_text = _format_search_results(search_results)
+        results_text = _format_search_results(search_results or [])
 
         response = llm.invoke(
             [

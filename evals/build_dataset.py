@@ -1,7 +1,9 @@
 """Build eval datasets from W&B/Weave traces.
 
 Queries Weave for per-agent predict traces and writes them as dataset JSON
-files suitable for ground-truth-free evaluation.
+files suitable for ground-truth-free evaluation. Each row includes model
+inputs plus ``predict_output`` (the stored ``predict`` return value) for
+trace-only batch scoring via ``python -m evals.batch_trace_eval``.
 
 Usage:
     python -m evals.build_dataset --agent planner
@@ -22,6 +24,8 @@ from pathlib import Path
 import weave
 from dotenv import load_dotenv
 from weave.trace_server.trace_server_interface import CallsFilter
+
+from .trace_payload import TRACE_PREDICT_OUTPUT_FIELD
 
 EVALS_DIR = Path(__file__).resolve().parent
 DATASETS_DIR = EVALS_DIR / "datasets"
@@ -124,6 +128,19 @@ def get_agent_calls(
     return matched
 
 
+def _materialize_call_output(value):
+    """Resolve Weave refs so JSON export contains plain data when possible."""
+    if value is None:
+        return None
+    get_fn = getattr(value, "get", None)
+    if callable(get_fn) and not isinstance(value, dict):
+        try:
+            return get_fn()
+        except Exception:
+            return value
+    return value
+
+
 def _extract_row(call, config: dict) -> dict:
     """Turn a single Weave call into a dataset row."""
     raw_inputs = call.inputs if call.inputs else {}
@@ -142,6 +159,10 @@ def _extract_row(call, config: dict) -> dict:
             value = attrs.get(field)
             if value is not None:
                 row[field] = value
+
+    out = _materialize_call_output(getattr(call, "output", None))
+    if out is not None:
+        row[TRACE_PREDICT_OUTPUT_FIELD] = out
 
     return row
 

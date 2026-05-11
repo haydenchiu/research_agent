@@ -115,9 +115,9 @@ async def run_eval(
     gt_free: bool = False,
 ) -> dict:
     """Run evaluation for a single agent and return results."""
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"  Evaluating: {agent_name}" + (" (GT-free)" if gt_free else ""))
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
     model = _load_model(agent_name)
     scorers = _load_scorers(agent_name, gt_free=gt_free)
@@ -161,11 +161,12 @@ def main() -> None:
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=(
             "Examples:\n"
-            '  python -m evals.run --agent planner\n'
-            '  python -m evals.run --all\n'
-            '  python -m evals.run --agent writer --dataset path/to/custom.json\n'
-            '  python -m evals.run --all --gt-free              # GT-free scorers only\n'
-            '  python -m evals.run --agent planner --gt-free    # uses *_traces.json if available\n'
+            "  python -m evals.run --agent planner\n"
+            "  python -m evals.run --all\n"
+            "  python -m evals.run --agent writer --dataset path/to/custom.json\n"
+            "  python -m evals.run --all --gt-free              # GT-free scorers only\n"
+            "  python -m evals.run --agent planner --gt-free    # uses *_traces.json if available\n"
+            "  python -m evals.batch_trace_eval --agent planner # GT-free on cached trace outputs\n"
         ),
     )
     parser.add_argument(
@@ -211,15 +212,13 @@ def main() -> None:
     all_results = {}
     for agent_name in agents:
         dataset_path = args.dataset if len(agents) == 1 else None
-        result = asyncio.run(
-            run_eval(agent_name, dataset_path, gt_free=args.gt_free)
-        )
+        result = asyncio.run(run_eval(agent_name, dataset_path, gt_free=args.gt_free))
         all_results[agent_name] = result
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"  Evaluation complete for {len(agents)} agent(s)")
     print(f"  View results at: https://wandb.ai/home -> Weave project '{args.project}'")
-    print(f"{'='*60}\n")
+    print(f"{'=' * 60}\n")
 
 
 if __name__ == "__main__":
